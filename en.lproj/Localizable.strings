@@ -1,0 +1,84 @@
+
+/*
+ //  Localizßable.strings
+ //  Orientamento
+ //  Created by Mauro Antonio Giacomello on 12/01/21.
+ //
+ //  The name of MAURO ANTONIO GIACOMELLO may not be used to endorse or promote
+ //  products derived from this software without specific prior written permission.
+ ********************************************************************************
+ * Copyright (c) 2020, 2021  Mauro Antonio Giacomello
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ ********************************************************************************
+ //
+ */
+/* orienting */
+"ori-msg-M0001"     = "Operating";
+"ori-msg-M0002"     = "Not Operating";
+"ori-msg-M0003"     = "Shake the device to proceed";
+"ori-msg-FAR"       = "Far";
+"ori-msg-NEAR"      = "Near";
+"ori-msg-RIGHTHERE" = "Right here";
+"ori-msg-SERVSTOP"  = "Disabled service";
+"ori-msg-FIRSTRUN"  = "First run";
+"ori-msg-LASTRUN"   = "Next run";
+/* orienting-PRIMEXX */
+"ori-msg-PRIMEXX-IN" = "";
+"ori-msg-PRIMEXX-END" = "";
+"ori-msg-PRIMEXX-KEEPCALM" = "";
+"ori-msg-PRIMEXX-OUTOFSEQUENCE" = "";
+"ori-msg-PRIMEXX-NEVERIN" = "";
+"ori-msg-PRIMEXX-000001" = "";
+"ori-msg-PRIMEXX-001002" = "";
+"ori-msg-PRIMEXX-002003" = "";
+"ori-msg-PRIMEXX-003011" = "";
+"ori-msg-PRIMEXX-011999" = "";
+/* forceexit */
+"frc-exit-001" = "Restart is needed";
+"frc-exit-002" = "We need to restart the app on your first login to the app.\n Please reopen the app after this.";
+"frc-exit-003" = "Close Now";
+"frc-exit-004" = "Later";
+"frc-exit-005" = "Continue";
+"ori-pc01-North" = "north";
+"ori-pc01-Sud" = "south";
+"ori-pc01-Est" = "est";
+"ori-pc01-West" = "west";
+/* voiceSetting */
+"vce-ut01-a01" = "aloud";
+"vce-ut01-a02" = "silently";
+/* voiceSetting */
+"vce-ut02-a01" = "faster";
+"vce-ut02-a02" = "slower";
+/* voiceSetting */
+"vce-ut03-a01" = "more spaced repetitions";
+"vce-ut03-a02" = "less spaced repetitions";
+/* voiceSetting */
+"vce-ut04-a01" = "is the number of allowed repetitions";
+/* autoDetectionPosition */
+"vce-ut10-b01" = "auto determinated location";
+/* aboutThisApp */
+"o2-ir1-aa3" = "This project is based on a MIT licensed general-purpose software written & Copyright[ed] 2020-2021 by Mauro Antonio Giacomello.\n";
+/* usageInstructions */
+"o2-ir1-au3" = "\n";
+/* dataPrivacy */
+"o2-ir1-dp3" = "\n";
+/* responsibilityDisclaimer */
+"o2-ir1-rd3" = "\n";
+

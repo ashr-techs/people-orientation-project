@@ -1,0 +1,145 @@
+
+/*
+ //  Main.strings
+ //  Orientamento
+ //  Created by Mauro Antonio Giacomello on 12/01/21.
+ //
+ //  The name of MAURO ANTONIO GIACOMELLO may not be used to endorse or promote
+ //  products derived from this software without specific prior written permission.
+ ********************************************************************************
+ * Copyright (c) 2020, 2021  Mauro Antonio Giacomello
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ ********************************************************************************
+ //
+ */
+/* Class = "UILabel"; text = "Privacy statement"; ObjectID = "1UW-u1-ghV"; */
+"1UW-u1-ghV.text" = "Privacy";
+/* Class = "UILabel"; text = "Destinations"; ObjectID = "4Ra-RK-PrN"; */
+"4Ra-RK-PrN.text" = "Percorsi";
+/* Class = "UILabel"; accessibilityLabel = "Destination heading"; ObjectID = "4Ra-RK-PrN"; */
+"4Ra-RK-PrN.accessibilityLabel" = "Percorsi  Intestazione";
+/* Class = "UILabel"; accessibilityHint = "destination selection"; ObjectID = "4Ra-RK-PrN"; */
+"4Ra-RK-PrN.accessibilityHint" = "Selezione destinazione";
+/* Class = "UILabel"; text = "Feature Controlling"; ObjectID = "7Pd-aV-xYU"; */
+"7Pd-aV-xYU.text" = "Funzionalità";
+/* Class = "UILabel"; accessibilityHint = "un'app per l'accessibilità e l'inclusione"; ObjectID = "97R-4s-fmI"; */
+"97R-4s-fmI.accessibilityHint" = "un'app per l'accessibilità e l'inclusione";
+/* Class = "UILabel"; text = "da:"; ObjectID = "9nz-UV-gcd"; */
+"9nz-UV-gcd.text" = "da:";
+/* Class = "UIButton"; normalTitle = "Proceed"; ObjectID = "Bse-ko-T7H"; */
+"Bse-ko-T7H.normalTitle" = "Procedi";
+/* Class = "UILabel"; text = "percorso:"; ObjectID = "C0o-Wp-aUb"; */
+"C0o-Wp-aUb.text" = "tappe:";
+/* Class = "UIButton"; normalTitle = "Accept"; ObjectID = "C3x-xN-e8h"; */
+"C3x-xN-e8h.normalTitle" = "Accetto";
+/* Class = "UILabel"; text = "Locationing"; ObjectID = "Ckv-NU-42x"; */
+"Ckv-NU-42x.text" = "Posizionamento";
+/* Class = "UITextView"; text = "..istruzioni.."; ObjectID = "DGs-CT-V3D"; */
+"DGs-CT-V3D.text" = "capitolo istruzioni";
+/* Class = "UILabel"; text = "modalità:"; ObjectID = "GBV-S6-Laq"; */
+"GBV-S6-Laq.text" = "modalità:";
+/* Class = "UILabel"; text = "Disclaimer statement"; ObjectID = "Jqs-mH-20N"; */
+"Jqs-mH-20N.text" = "Manleva";
+/* Class = "UIButton"; normalTitle = "Stop/Reset"; ObjectID = "LXY-sZ-aTP"; */
+"LXY-sZ-aTP.normalTitle" = "Stop/Reset";
+/* Class = "UITextView"; text = "Event Log"; ObjectID = "On2-n0-RpS"; */
+"On2-n0-RpS.text" = "Event Log";
+/* Class = "UILabel"; text = "About this app:"; ObjectID = "RNT-Bw-EDC"; */
+"RNT-Bw-EDC.text" = "Cosè questa app:";
+/* Class = "UILabel"; text = "Posture:"; ObjectID = "RU4-9X-Woq"; */
+"RU4-9X-Woq.text" = "Anonimato:";
+/* Class = "UIButton"; normalTitle = "Start"; ObjectID = "W6F-Qw-wwf"; */
+"W6F-Qw-wwf.normalTitle" = "Start";
+/* Class = "UIButton"; normalTitle = "Reset"; ObjectID = "WZg-3k-5LS"; */
+"WZg-3k-5LS.normalTitle" = "Reset";
+/* Class = "UIButton"; normalTitle = "Lissen"; ObjectID = "Wre-Tm-xpA"; */
+"Wre-Tm-xpA.normalTitle" = "GO";
+/* Class = "UIButton"; normalTitle = "Stats"; ObjectID = "XBX-1L-p7b"; */
+"XBX-1L-p7b.normalTitle" = "Numeri";
+/* Class = "UIButton"; normalTitle = "Accept"; ObjectID = "XFw-Sx-oU6"; */
+"XFw-Sx-oU6.normalTitle" = "Accetto";
+/* Class = "UITabBarItem"; title = "Map"; ObjectID = "acW-dT-cKf"; */
+"acW-dT-cKf.title" = "Mappa";
+/* Class = "UILabel"; text = "Feedback:"; ObjectID = "b83-hh-mZN"; */
+"b83-hh-mZN.text" = "Feedback:";
+"97R-4s-fmI.text" = "Qwerty Progetto XYZ";
+/* Class = "UILabel"; accessibilityLabel = "Premise of Qwerty XYZ project  Intestazione"; ObjectID = "97R-4s-fmI"; */
+"97R-4s-fmI.accessibilityLabel" = "Universita di Qwerty Progetto XYZ  Intestazione";
+/* Class = "UITabBarItem"; title = "S-Settings"; ObjectID = "cPa-gy-q4n"; */
+"cPa-gy-q4n.title" = "S-Impostazioni";
+/* Class = "UITextView"; text = "..??.."; ObjectID = "dwu-mP-NxH"; */
+"dwu-mP-NxH.text" = "..??..";
+/* Class = "UILabel"; text = "Phone #"; ObjectID = "hSY-Zd-NO3"; */
+"hSY-Zd-NO3.text" = "Telefono";
+/* Class = "UITextView"; text = "..privacy.."; ObjectID = "hjc-63-xQo"; */
+"hjc-63-xQo.text" = "Capitolo Privacy";
+/* Class = "UILabel"; text = "Statistiche"; ObjectID = "ieC-PJ-xpX"; */
+"ieC-PJ-xpX.text" = "Statistiche";
+/* Class = "UILabel"; text = "Instructions"; ObjectID = "jse-6y-dRF"; */
+"jse-6y-dRF.text" = "Istruzioni";
+/* Class = "UIButton"; normalTitle = "Event Log"; ObjectID = "rZV-Av-0Q2"; */
+"rZV-Av-0Q2.normalTitle" = "Event Log";
+/* Class = "UITabBarItem"; title = "Destinations"; ObjectID = "sL5-Cj-OyX"; */
+"sL5-Cj-OyX.title" = "Percorsi";
+/* Class = "UILabel"; text = "a:"; ObjectID = "tH7-rt-bjs"; */
+"tH7-rt-bjs.text" = "a:";
+/* Class = "UITextView"; text = "..disclaimer.."; ObjectID = "uGz-Dc-uk0"; */
+"uGz-Dc-uk0.text" = "Capitolo Disclaimer";
+/* Class = "UILabel"; text = "criterio:"; ObjectID = "uki-ke-E7A"; */
+"uki-ke-E7A.text" = "criterio:";
+/* Class = "UILabel"; text = "Character:"; ObjectID = "xQ5-vW-PT6"; */
+"xQ5-vW-PT6.text" = "Utente:";
+/* Class = "UILabel"; text = "Sys-Settings"; ObjectID = "xgq-fV-Wl0"; */
+"xgq-fV-Wl0.text" = "S-Impostazioni";
+/* Class = "UILabel"; accessibilityHint = "Planimetria generale"; ObjectID = "zEq-FU-wV5"; */
+"zEq-FU-wV5.accessibilityHint" = "Planimetria generale";
+/* Class = "UILabel"; accessibilityLabel = "Mappa"; ObjectID = "zEq-FU-wV5"; */
+"zEq-FU-wV5.accessibilityLabel" = "Mappa";
+/* Class = "UILabel"; text = "Navigazione"; ObjectID = "zEq-FU-wV5"; */
+"zEq-FU-wV5.text" = "Mappa";
+/* Class = "UIButton"; normalTitle = "Ok"; ObjectID = "zxp-Hx-Xl3"; */
+"zxp-Hx-Xl3.normalTitle" = "Letto";
+/* Class = "UIButton"; normalTitle = "efesto"; ObjectID = "49M-cU-cnh"; */
+"49M-cU-cnh.normalTitle" = "route";
+/* Class = "UILabel"; text = "Personal Settings"; ObjectID = "kdH-g5-4xM"; */
+"kdH-g5-4xM.text" = "Impostazioni";
+/* Class = "UITabBarItem"; title = "Settings"; ObjectID = "rIE-O7-S4Y"; */
+"rIE-O7-S4Y.title" = "Impostazioni";
+/* Class = "UILabel"; text = "Log Selection"; ObjectID = "TYl-Ke-CQg"; */
+"TYl-Ke-CQg.text" = "Selezione Log";
+/* Class = "UILabel"; text = "Voice Reader Volume"; ObjectID = "bPw-9P-JZQ"; */
+"bPw-9P-JZQ.text" = "Regolazione del volume sonoro";
+/* Class = "UILabel"; text = "Voice Reader Speed"; ObjectID = "chH-lv-Wus"; */
+"chH-lv-Wus.text" = "Regolazione velocità di lettura";
+/* Class = "UILabel"; text = "Voice Reader Paceing"; ObjectID = "Vbk-ze-Weg"; */
+"Vbk-ze-Weg.text" = "Distanze tra ripetizioni";
+/* Class = "UILabel"; text = "Number of Repetitions"; ObjectID = "AGC-6h-Tjb"; */
+"AGC-6h-Tjb.text" = "Max # di ripetizioni";
+/* Class = "UILabel"; text = "Voice Character"; ObjectID = "ECo-ET-56c"; */
+"ECo-ET-56c.text" = "Voce";
+/* Class = "UIStepper"; accessibilityLabel = "regolazione volume"; ObjectID = "nhb-uc-vA7"; */
+"nhb-uc-vA7.accessibilityLabel" = "volume voce";
+/* Class = "UIStepper"; accessibilityLabel = "regolazione velocità"; ObjectID = "Glw-iq-IsJ"; */
+"Glw-iq-IsJ.accessibilityLabel" = "velocità voce";
+/* Class = "UIStepper"; accessibilityLabel = "regolazione ripetizione"; ObjectID = "fVT-tm-gMo"; */
+"fVT-tm-gMo.accessibilityLabel" = "intervallo ripetizione";
+/* Class = "UIStepper"; accessibilityLabel = "numero ripetizioni"; ObjectID = "yvI-4Q-EQf"; */
+"yvI-4Q-EQf.accessibilityLabel" = "numero ripetizioni";
+
