@@ -148,7 +148,9 @@ class SigninViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         locationManager = CLLocationManager()
         locationManager?.delegate = self
         
-        
+        if (configInPlace.background==true){
+            locationManager?.requestAlwaysAuthorization()
+        }
         
         locationManager?.distanceFilter = kCLDistanceFilterNone
         //locationManager?.desiredAccuracy = kCLLocationAccuracyBest
@@ -294,7 +296,7 @@ extension SigninViewController {  // ViewController
                     defaultsDataStore.set("dressed", forKey: DefaultsKeysDataStore.keyUserPosture)
                     defaultsDataStore.set("shake",   forKey: DefaultsKeysDataStore.keyFeedbackMode)
                     
-                    defaultsDataStore.set("PREMISE", forKey: DefaultsKeysDataStore.keyManagedArea)
+                    defaultsDataStore.set("UNIPVSP", forKey: DefaultsKeysDataStore.keyManagedArea)
                     
                     
                     
@@ -479,7 +481,7 @@ extension SigninViewController {  // ViewController
         if UIApplication.shared.supportsAlternateIcons {
             // let the user choose a new icon
             print("authorized)")
-            UIApplication.shared.setAlternateIconName("PREMISE")
+            UIApplication.shared.setAlternateIconName("UNIPVSP")
         }
                 
         return
@@ -502,7 +504,7 @@ extension SigninViewController {  // ViewController
                 print("App Icon reversed to default!")
                 // Show default app icon (Red Logo)
                 //UIApplication.shared.setAlternateIconName(nil)
-                UIApplication.shared.setAlternateIconName("PREMISEpurple")
+                UIApplication.shared.setAlternateIconName("UNIPVSPpurple")
             }
         }
     }
@@ -514,10 +516,35 @@ extension SigninViewController {  // ViewController
             let alertMsg = "App disribution controller. Trial period expired. Call your technical support."
             let alert = UIAlertController(title: "Orientamento ver "+String(configInPlace.versions[0]), message: alertMsg, preferredStyle: UIAlertController.Style.alert)
             // add an action (button)
-            alert.addAction(UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: nil))
+            // alert.addAction(UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: nil))
+            alert.addAction(UIAlertAction(title: "ok", style: .cancel, handler: { (action: UIAlertAction!) in
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                    exit(EXIT_SUCCESS)
+                })
+            }))
             // show the alert
             self.present(alert, animated: true, completion: nil)
-            exit(EXIT_SUCCESS)
+            /*
+             let alertMsg = "App disribution controller. Trial period expired. Call your technical support."
+             
+             showMessageResetApp("Orientamento ver \(String(configInPlace.versions[0]))",alertMsg)
+             /*
+             let alert = UIAlertController(title: "Orientamento ver "+String(configInPlace.versions[0]), message: alertMsg, preferredStyle: UIAlertController.Style.alert)
+             // add an action (button)
+             // alert.addAction(UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: nil))
+             //alert.addAction(UIAlertAction(title: "ok", style: .cancel, handler: { (action: UIAlertAction!) in
+             alert.addAction(UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction!) in
+                 //exit(EXIT_SUCCESS)
+                 // terminaing app in background
+                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                     exit(EXIT_SUCCESS)
+                 })
+             }))
+             // show the alert
+             self.present(alert, animated: true, completion: nil)
+              */
+             */
+            
         }
   
                 
@@ -951,7 +978,9 @@ extension SigninViewController {  // gps and beacon location manager
         beaconRegion.notifyOnEntry = true
         beaconRegion.notifyEntryStateOnDisplay = true
         beaconRegion.notifyOnExit = true
-        
+        if (configInPlace.background==true){
+            locationManager?.allowsBackgroundLocationUpdates = true;
+        }
         
         locationManager?.startMonitoring(for: beaconRegion)
         locationManager?.startRangingBeacons(in: beaconRegion)

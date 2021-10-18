@@ -454,7 +454,7 @@ struct GuidaDataModel {
     static var commandX =       ["delay=","more="]
     
     
-    static let managedAreas =       ["PREMISE"
+    static let managedAreas =       ["UNIPVSP"
                                      ]
     static var zRTV:[Float]         = [-20,-70,-99] // Beacon threshold baseline levels
     //static let zRTV:[Float]         = [-57,-75,-87] // Beacon threshold baseline levels
@@ -494,7 +494,7 @@ struct GuidaDataModel {
                                       ]
     
     static let beaconConfigurationPRIMEXX =   BeaconsTopology.init(
-        id: "PREMISE",
+        id: "UNIPVSP",
         uuid: "00000000-0000-0000-0000-000003002001",
         beacons: [
             
@@ -508,7 +508,7 @@ struct GuidaDataModel {
                                         //to be removed
     
     static let fencingConfigurationPRIMEXX =   FencesTopology.init(
-        id: "PREMISE",
+        id: "UNIPVSP",
         fences: [
             
         ]
@@ -521,7 +521,7 @@ struct GuidaDataModel {
     
     
     static let indicazioniPRIMEXX = IndicazioniOrientamento.init(
-        id: "PREMISE",
+        id: "UNIPVSP",
         indicazioni: [
             
         ]
@@ -535,7 +535,7 @@ struct GuidaDataModel {
     
     
     static let percorsiPRIMEXX = IndicazioniPercorsi.init(
-        id: "PREMISE",
+        id: "UNIPVSP",
         indicazioni: [
             [
             
@@ -571,8 +571,10 @@ class ConfigInPlace : Codable {
     var shaker =                false;
     var t2s =                   false;
     
+    var background =            true;
     
-    var timeBombed =            true;
+    
+    var timeBombed =            false;
     
     
     
@@ -2426,7 +2428,7 @@ func catchNotificationRoute(notification:Notification) -> Void {
             status.navigatorCockpit.c.motivoCreazionePercorso = "\(_ap!.1)/\(_ap!.2)"
             
             
-            let envSettings = EnvironmentSettings(what:"initialize",environmentID: "PREMISE")
+            let envSettings = EnvironmentSettings(what:"initialize",environmentID: "UNIPVSP")
             
             let _fc = setCTLS(envSettings)
             
@@ -3573,8 +3575,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         status.days2EOS = "\(ddi)"
         print("dt \(dt) vs \(vt) delta = \(vt-dt) ddi \(ddi)")
         //if ( dt > vt ){
-        if (ddi > 0) {
-            configInPlace.timeBombed = true
+        if (configInPlace.timeBombed && ddi > 0) {
+            configInPlace.timeBombed = true         // confermo
+        }else{
+            configInPlace.timeBombed = false        // disattivo se previsto
         }
         
         // *** - *** - *** - *** - *** - *** - *** - *** - *** - *** - *** - *** - *** - *** - *** - //
@@ -3603,11 +3607,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //start mod#0002
         //FORZATO XCHE NON DINAMICO
-        configInPlace.configurationURL = "https://DOMAINID/configName/v15/../*.html"
+        configInPlace.configurationURL = "https://asphi.it/conf_app/v15/../*.html"
         defaultsDataStore.set(configInPlace.configurationURL, forKey: DefaultsKeysDataStore.keyConfigurationURL)
         defaultsDataStore.set("yes", forKey: DefaultsKeysDataStore.keyConfigurationURLverified)
         configInPlace.configurationURLverified = true
         //end mod#0002
+        /* to be removed !!!
+        configInPlace.configurationURL = "http://169.254.175.194:1887/ASPHI/v15"
+        defaultsDataStore.set(configInPlace.configurationURL, forKey: DefaultsKeysDataStore.keyConfigurationURL)
+        defaultsDataStore.set("yes", forKey: DefaultsKeysDataStore.keyConfigurationURLverified)
+        configInPlace.configurationURLverified = true
+        // to be removed !!! */
                 
         // *** - *** - *** - *** - *** - *** - *** - *** - *** - *** - *** - *** - *** - *** - //
                 

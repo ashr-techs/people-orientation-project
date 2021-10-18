@@ -113,8 +113,11 @@ private let rFIV:CGFloat = -19.0 // it was -19 for iphone 7
 private var trimmingSession = 0
 private var trimmingSessionTime:Int64 = 0
 private var trimmingSessionTitleLabelColor:UIColor? = nil
-private let __wildGEOcoord:[[Float]] = [[40.187765,7.157728]]
-private let __stackGEOcoord:[[Float]] = [[40.186864,7.157828]]
+private let __wildGEOcoord:[[Float]] = [[45.187765,9.157728]]
+private let __stackGEOcoord:[[Float]] = [
+        [45.186864,9.157828]        // UNIPV09pt 1 obbligatorio
+    
+                            ]
 private var __cliccanum = 0
 private var tuneMode = false
 struct  _Stroke {
@@ -784,14 +787,14 @@ class FirstViewController: UIViewController, SFSpeechRecognizerDelegate, AVAudio
         
         // set up a reference system (just to establish a coordinate reference system
         // as alternative to what googlemap is doing for you when you use overlays)
-        // A [40.18779, 7.156248,5,"fence","PREMISE pt 04"],
-        // C [40.187293,7.158488,5,"fence","PREMISE pt 05"],
-        // B [40.186496,7.158393,5,"fence","PREMISE pt 06"],
-        // D [40.186261,7.156675,5,"fence","PREMISE pt 07"],
-        private let geoPointA:[Float]           = [40.18779,7.15630]
-        private let geoPointB:[Float]           = [40.18629,7.15662]
-        private let geoPointC:[Float]           = [40.18730,7.15833]
-        private let geoPointD:[Float]           = [40.186515,7.158306]
+        // A [45.18779, 9.156248,5,"fence","UNIPVSP pt 04"],
+        // C [45.187293,9.158488,5,"fence","UNIPVSP pt 05"],
+        // B [45.186496,9.158393,5,"fence","UNIPVSP pt 06"],
+        // D [45.186261,9.156675,5,"fence","UNIPVSP pt 07"],
+        private let geoPointA:[Float]           = [45.18779,9.15630]
+        private let geoPointB:[Float]           = [45.18629,9.15662]
+        private let geoPointC:[Float]           = [45.18730,9.15833]
+        private let geoPointD:[Float]           = [45.186515,9.158306]
         private var geoPoint00:[Float]          = []
         private var geoPointZZ:[Float]          = []
         
@@ -974,8 +977,8 @@ class FirstViewController: UIViewController, SFSpeechRecognizerDelegate, AVAudio
             // proviamo con un approccio più semplice... utilizziamo punti A e D
             // =====================================================================
             
-            // punto A offset x=166 y=16  Lat 40.18779  Lng 7.15630
-            // punto D offset x=857 y=607 Lat 40.186515 Lng 7.158306
+            // punto A offset x=166 y=16  Lat 45.18779  Lng 9.15630
+            // punto D offset x=857 y=607 Lat 45.186515 Lng 9.158306
             // distanza AD Latitude Longitude
             
             
@@ -1289,7 +1292,9 @@ class FirstViewController: UIViewController, SFSpeechRecognizerDelegate, AVAudio
         
         if (status.inFlight == false) {
             status.navigatorCockpit.houseKeeping = false
+            
             aGranVoce("ori-msg-SERVSTOP", 15.00, toErase: "all" ) // operating
+            aGranVoce("", 00.00, toErase: "dropAllPendingWords" ) // purge synthesizer
             return
         }
         
@@ -2314,6 +2319,11 @@ class FirstViewController: UIViewController, SFSpeechRecognizerDelegate, AVAudio
     
     
     func aGranVoce(_ daGridare: String, _ nonRepeatitionWindow: Float, toErase: String){
+        if (toErase == "dropAllPendingWords"){
+            FirstViewController.synthesizer.stopSpeaking(at: AVSpeechBoundary.word /*.immediate*/)
+            return
+        }
+        
         var __nonRepeatitionWindow = 0.0
         
         var multiplier:Float = 0.0

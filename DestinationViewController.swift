@@ -103,7 +103,7 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
         
         
             
-            if (status.selectedArea=="PREMISE") {
+            if (status.selectedArea=="UNIPVSP") {
                 
                 
                 
@@ -268,8 +268,8 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
         
         /* se destinazioniAttivate non vuota allora le considero */
         if (status.destinazioniAttivate.count > 0){
+            print("destinazioni attivate \(status.destinazioniAttivate))")
             let gvts:[_Vert] = topo.fwGrapherx("lggVertici") //mod#0004
-            
             for v in gvts {
                 var fnd = false
                 for a in status.destinazioniAttivate {
@@ -1001,6 +1001,10 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
         var selection:String = ""
         
         if (pickerView==daPickerView){
+            if (row >= status.possibiliOrigini.count){
+                return
+            }
+            
             selection = status.possibiliOrigini[row] as String
             
             //mod#0001//changed
@@ -1008,6 +1012,10 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
             managingDa(selection)
         }else{
             if (pickerView==aPickerView){
+                if (row >= status.possibiliDestinazioni.count){
+                    return
+                }
+                
                 selection = status.possibiliDestinazioni[row] as String
                 
                 status.destinazione = selection
@@ -1081,7 +1089,12 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
                         status.modalita = selection
                     }else{
                         if (pickerView==percorsoPickedView){
+                            if (row >= status.percorsoSelezionato.count){
+                                return
+                            }
+                            
                             selection = status.percorsoSelezionato[row] as String
+                            
                         }else{
                             selection = "!"
                         }
