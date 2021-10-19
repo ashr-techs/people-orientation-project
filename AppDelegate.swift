@@ -4291,7 +4291,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         
-        
+          
+          // Setup AVAudioSession to indicate to the system you how intend to play audio.
+          // https://developer.apple.com/documentation/avfaudio/avaudiosession
+          // stis step is crucial to have speech synthesizer working in background
+          let audioSession = AVAudioSession.sharedInstance()
+          do {
+              try audioSession.setCategory(AVAudioSession.Category.playback, mode: AVAudioSession.Mode.default)
+          }
+          catch {
+              print("An error occured setting the audio session category: \(error)")
+          }
+          
+          // Set the AVAudioSession as active.  This is required so that your application becomes the "Now Playing" app.
+          do {
+              try audioSession.setActive(true)
+          }
+          catch {
+              print("An Error occured activating the audio session: \(error)")
+          }
+         
         
         
         

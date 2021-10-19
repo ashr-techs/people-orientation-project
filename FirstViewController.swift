@@ -2599,10 +2599,9 @@ class FirstViewController: UIViewController, SFSpeechRecognizerDelegate, AVAudio
     
     
     
-    // MARK: SFSpeechRecognizerDelegate
     
     
-    // MARK: Interface Builder actions
+    
     
     
     
