@@ -381,7 +381,7 @@ struct SceneModel {
     var scene2:UIImage? = nil
 }
 struct GuidaDataModel {
-    static let versionSuppModes =   ["b083-20210922"]             //ptf-210109
+    static let versionSuppModes =   ["b084-20211020"]             //ptf-210109
     
     static var operatingFeatures =  ["Beacon"
                                      
@@ -644,6 +644,14 @@ struct StatusController : Codable {
     var segmenti                                = GuidaDataModel.segmenti
     var percorsi                                = GuidaDataModel.percorsi
     
+    // fix 20211020 - steps to be strictly performed just one time or under a predeterminated sequence 0 to .... n
+    static var fireTimingClock                  = 0
+    static var fireTimingSniffInsideRetrievedData = 0
+    static var fireTimingSignalProcessor        = 0
+    static var fireTimingPreSimulator           = 0
+    static var fireTimingNavigatorCockpit       = 0
+    
+    
     static var orentationMapInitialized:Bool    = false
     static var virtualCoordinateActivated:Bool  = false
     
@@ -820,6 +828,14 @@ class Status {
     
     var signalsBEACONdata:[[Any]]               = StatusController.signalsBEACONdata
     var lastSignalProcessed                     = StatusController.lastSignalProcessed
+    
+    // fix 20211020 - steps to be strictly performed just one time or under a predeterminated sequence 0 to .... n
+    var fireTimingClock                         = StatusController.fireTimingClock
+    var fireTimingSniffInsideRetrievedData      = StatusController.fireTimingSniffInsideRetrievedData
+    var fireTimingSignalProcessor               = StatusController.fireTimingSignalProcessor
+    var fireTimingPreSimulator                  = StatusController.fireTimingPreSimulator
+    var fireTimingNavigatorCockpit              = StatusController.fireTimingNavigatorCockpit
+    
     
     var orentationMapInitialized                = StatusController.orentationMapInitialized
     var virtualCoordinateActivated              = StatusController.virtualCoordinateActivated
@@ -2238,6 +2254,7 @@ func catchNotificationRoute(notification:Notification) -> Void {
             
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             
+            var _numTappe = 99999
             var _routeIndex = 0
             for (nipc,ipc) in status.indicazioniPercorsi.enumerated() {
                 if (ipc.id==status.selectedArea){
@@ -2294,10 +2311,17 @@ func catchNotificationRoute(notification:Notification) -> Void {
                             //print(_npt)
                             //print(status.percorsoTecnico.count)
                             if (_npt == (status.percorsoTecnico.count - 1)) {
-                                _routeIndex = nip
+                                print("route found \(_npt) \(nip) \(_numTappe) \(indicazioniPercorso.count)")
+                                if (_numTappe > indicazioniPercorso.count){
+                                    print("route replaced \(_npt) \(_routeIndex) \(nip) \(_numTappe) \(indicazioniPercorso.count)")
+                                    _numTappe = indicazioniPercorso.count
+                                    _routeIndex = nip
+                                    
+                                }
+            
                                 print("forced route index \(_routeIndex) \(_npt) \(status.percorsoTecnico.count)")
                                 fnd = true
-                                break
+                                
                             }else{
                             }
                         }

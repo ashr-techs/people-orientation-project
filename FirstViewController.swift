@@ -470,11 +470,22 @@ class FirstViewController: UIViewController, SFSpeechRecognizerDelegate, AVAudio
         _currentViewWidth = virtualCoordinate.getViewWidht()
         
         status.signalProcessor = true
-        _ = Timer.scheduledTimer(timeInterval: 0.9, target: self, selector: #selector(FireTimingSignalProcessor), userInfo: nil, repeats: true)
+        if (status.fireTimingSignalProcessor == 0) {
+            status.fireTimingSignalProcessor = 1
+            _ = Timer.scheduledTimer(timeInterval: 0.9, target: self, selector: #selector(FireTimingSignalProcessor), userInfo: nil, repeats: true)
+        }else{
+            EXIT_FAILURE
+        }
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         status.navigatorCockpit.status = true
-        _ = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(FireTimingNavigatorCockpit), userInfo: nil, repeats: true)
+        if (status.fireTimingNavigatorCockpit == 0) {
+            status.fireTimingNavigatorCockpit = 1
+            _ = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(FireTimingNavigatorCockpit), userInfo: nil, repeats: true)
+        }else{
+            EXIT_FAILURE
+        }
+        
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         
@@ -1289,6 +1300,8 @@ class FirstViewController: UIViewController, SFSpeechRecognizerDelegate, AVAudio
     
     
     @objc func FireTimingNavigatorCockpit() {
+        status.fireTimingNavigatorCockpit += 1
+        
         
         if (status.inFlight == false) {
             status.navigatorCockpit.houseKeeping = false
@@ -1719,6 +1732,8 @@ class FirstViewController: UIViewController, SFSpeechRecognizerDelegate, AVAudio
     
     @objc func FireTimingSignalProcessor()
     {
+        
+        status.fireTimingSignalProcessor += 1
             
         // routine di rendering dei dati presenti nell'array retrievedData
         // caricato in memoria dalla procedura di lettura del file di log

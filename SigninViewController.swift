@@ -193,7 +193,13 @@ class SigninViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         nc.addObserver(self, selector: #selector(disclamerAccepted), name: Notification.Name("disclamerAccepted"), object: nil)
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         
-        _ = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(clockFireTiming), userInfo: nil, repeats: true)
+        if (status.fireTimingClock == 0) {
+            status.fireTimingClock = 1
+            _ = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(FireTimingClock), userInfo: nil, repeats: true)
+        }else{
+            EXIT_FAILURE
+        }
+         
        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         
@@ -237,8 +243,11 @@ class SigninViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     */
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-    @objc func clockFireTiming()
+    @objc func FireTimingClock()
     {
+        
+        status.fireTimingClock += 1
+        
         //AudioServicesPlaySystemSound(1306)
     }
     /*

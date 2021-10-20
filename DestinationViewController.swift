@@ -695,7 +695,13 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
         _ftSIRD.invalidate()
         status.autoLocation = false
         
-        _ftSIRD = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(FireTimingSniffInsideRetrievedData), userInfo: nil, repeats: true)
+        if (status.fireTimingSniffInsideRetrievedData == 0) {
+            status.fireTimingSniffInsideRetrievedData = 1
+            _ftSIRD = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(FireTimingSniffInsideRetrievedData), userInfo: nil, repeats: true)
+        }else{
+            //EXIT_FAILURE
+        }
+        
         self.viewWillAppear(true)
     }
     @IBOutlet weak var stopResetButton: UIButton!
@@ -742,7 +748,12 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
             //NotificationCenter.default.removeObserver(catchNotificationForOrientation)
             NotificationCenter.default.removeObserver(_tknForOri)
             if (status.modalita==NSLocalizedString("pre-simulation", comment: "")) {
-                _ = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(FireTimingPreSimulator), userInfo: nil, repeats: true)
+                if (status.fireTimingPreSimulator == 0) {
+                    status.fireTimingPreSimulator = 1
+                    _ = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(FireTimingPreSimulator), userInfo: nil, repeats: true)
+                }else{
+                    EXIT_FAILURE
+                }
             }
         }
         
@@ -825,8 +836,13 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
         
         // Do any additional setup after loading the view.
         
+        if (status.fireTimingSniffInsideRetrievedData == 0) {
+            status.fireTimingSniffInsideRetrievedData = 1
+            _ftSIRD = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(FireTimingSniffInsideRetrievedData), userInfo: nil, repeats: true)
+        }else{
+            EXIT_FAILURE
+        }
         
-        _ftSIRD = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(FireTimingSniffInsideRetrievedData), userInfo: nil, repeats: true)
     }
     
     override func viewWillAppear(_ sender: Bool) {
@@ -1184,6 +1200,8 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
     @objc func FireTimingPreSimulator()
     {
         
+        status.fireTimingPreSimulator += 1
+        
         if (status.routeSegmentF2FUnderTheFocus.count > 0) {
             var bt = ""
             if (status.routeSegmentF2FUnderTheFocus.count > 1) {
@@ -1219,6 +1237,9 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
     
     @objc func FireTimingSniffInsideRetrievedData()
     {
+        
+        status.fireTimingSniffInsideRetrievedData += 1
+        
         // enabling auto-location if not active setting the threshould value
         if (!status.autoLocation) {
             __last_shakered_times = statistics.shaker
