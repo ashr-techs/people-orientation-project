@@ -556,6 +556,9 @@ extension SigninViewController {  // ViewController
             
         }
   
+        // reset control flags to force re-inizialization of the main scene
+        status.orentationMapInitialized = false
+        status.virtualCoordinateActivated = false
                 
         let defaultsDataStore = UserDefaults.standard
         

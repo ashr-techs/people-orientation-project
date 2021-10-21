@@ -717,6 +717,8 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
         status.autoLocation = false
         
         status.inFlight = true
+        status.OTResetRequest = true
+        
         threadSafeSignalProcessor.lock()
         status.retrievedData = []
         threadSafeSignalProcessor.unlock()

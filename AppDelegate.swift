@@ -36,6 +36,393 @@ import AVFoundation
 import Foundation
 import JavaScriptCore
 import SwiftUI
+class SetUpTheVirtualCoordinateSystem {
+    
+    // set up a reference system (just to establish a coordinate reference system
+    // as alternative to what googlemap is doing for you when you use overlays)
+    // A [45.18779, 9.156248,5,"fence","UNIPVSP pt 04"],
+    // C [45.187293,9.158488,5,"fence","UNIPVSP pt 05"],
+    // B [45.186496,9.158393,5,"fence","UNIPVSP pt 06"],
+    // D [45.186261,9.156675,5,"fence","UNIPVSP pt 07"],
+    private let geoPointA:[Float]           = [45.18779,9.15630]
+    private let geoPointB:[Float]           = [45.18629,9.15662]
+    private let geoPointC:[Float]           = [45.18730,9.15833]
+    private let geoPointD:[Float]           = [45.186515,9.158306]
+    private var geoPoint00:[Float]          = []
+    private var geoPointZZ:[Float]          = []
+    
+    private var latAvgFactor:Float          = 0.0
+    private var lngAvgFactor:Float          = 0.0
+    
+    private let distFisicaMetriAC:Float     = 171.84
+    private let distFisicaMetriAB:Float     = 168.43
+    private let distFisicaMetriBC:Float     = 173.24
+    private let distFisicaMetriAD:Float     = 211.94
+    private var distFisicaMetri00ZZ:Float   = 0.0
+    private var distFisicaMetri00ZZlng:Float = 0.0
+    private var distFisicaMetri00ZZlat:Float = 0.0
+    private let pictureWidth:Double         = 996
+    private let pictureHeight:Double        = 886
+    private var viewWidht:Double            = 394
+    private var viewHeight:Double           = 420
+    private let offsetPointA:[Float]        = [166.0,17.0]    // x,y 167 museo volta angolo via strada nuova via carlo alberto
+    private let offsetPointB:[Float]        = [315.0,736.0]   // x,y 319 aula magna
+    private let offsetPointC:[Float]        = [874.0,226.0]   // x,y via Carlo Alberto
+    private let offsetPointD:[Float]        = [857.0,607.0]   // x,y collegio angolo sud/est
+    private var offsetPoint00:[Float]       = []              // x,y 00
+    private var offsetPointZZ:[Float]       = []              // x,y 996,886
+    
+    private var ddd:[Double] = []
+    private var fff:[Float] = []
+    
+    init() {
+        self.ddd = [3,5]
+        self.fff = [0.6,1.3]
+    }
+    
+    func getViewHeight() -> Double {
+        return self.viewHeight
+    }
+    func getViewWidht()  -> Double {
+        return self.viewWidht
+    }
+    
+    func locationWithBearing(bearingRadians:Double, distanceMeters:Double, origin:CLLocationCoordinate2D) -> CLLocationCoordinate2D {
+        // bearing = 0 North, 180 South, 270 West, 90 Est
+        let distRadians = distanceMeters / (6372797.6) // earth radius in meters
+        let lat1 = origin.latitude * Double.pi / 180
+        let lon1 = origin.longitude * Double.pi / 180
+        let lat2 = asin(sin(lat1) * cos(distRadians) + cos(lat1) * sin(distRadians) * cos(bearingRadians))
+        let lon2 = lon1 + atan2(sin(bearingRadians) * sin(distRadians) * cos(lat1), cos(distRadians) - sin(lat1) * sin(lat2))
+        return CLLocationCoordinate2D(latitude: lat2 * 180 / Double.pi, longitude: lon2 * 180 / Double.pi)
+    }
+    
+     
+    
+    func distance(_ fromX:Double,_ fromY:Double,_ toX:Double,_ toY:Double) -> Double {
+            let coordinate₀ = CLLocation(latitude: fromX, longitude: fromY)
+            let coordinate₁ = CLLocation(latitude: toX, longitude:  toY)
+            let distanceInMeters = coordinate₀.distance(from: coordinate₁)
+            return distanceInMeters
+        }
+    
+    func setBasicImageReferences( guidaImageView :UIImageView ) -> UIImageView {
+        offsetPoint00 = [Float(0.0),Float(0.0)]
+        offsetPointZZ = [Float(self.pictureWidth),Float(self.pictureHeight)]
+        
+        // CALCOLO PUNTO geo00
+        
+        /* AB */
+        
+        let dABlat = (geoPointA[0]-geoPointB[0])
+        let dABlng = (geoPointA[1]-geoPointB[1])
+        let geoDistMetersAB = distance(Double(geoPointA[0]),Double(geoPointA[1]),Double(geoPointB[0]),Double(geoPointB[1]))
+        print("AB \(Float(geoDistMetersAB)/distFisicaMetriAB)")
+        
+        let geoDistMetersABlat = distance(Double(geoPointA[0]),Double(geoPointB[1]),Double(geoPointB[0]),Double(geoPointB[1]))
+        print("ABlat \(Float(geoDistMetersABlat))")
+        
+        let geoDistMetersABlng = distance(Double(geoPointA[0]),Double(geoPointB[1]),Double(geoPointA[0]),Double(geoPointA[1]))
+        print("ABlng \(Float(geoDistMetersABlng))")
+        
+        // Prova del 9 >>> sounds very good !
+        let geoDistMetersABpitagora = sqrt((geoDistMetersABlng*geoDistMetersABlng)+(geoDistMetersABlat*geoDistMetersABlat))
+        print("ABpit \(Float(Float(geoDistMetersABpitagora)/Float(geoDistMetersAB)))")
+        // Calcolo una tantum la distanza AD perchè non la conosco
+        
+        let geoDistMetersAD = distance(Double(geoPointA[0]),Double(geoPointA[1]),Double(geoPointD[0]),Double(geoPointD[1]))
+        print("AD \(Float(geoDistMetersAD)/distFisicaMetriAD)")
+        
+        
+        /* BC */
+        
+        let dBClat = (geoPointB[0]-geoPointC[0])
+        let dBClng = (geoPointB[1]-geoPointC[1])
+        let geoDistMetersBC = distance(Double(geoPointB[0]),Double(geoPointB[1]),Double(geoPointC[0]),Double(geoPointC[1]))
+        print("BC \(Float(geoDistMetersBC)/distFisicaMetriBC)")
+        /* AC */
+        
+        let dAClat = (geoPointA[0]-geoPointC[0])
+        let dAClng = (geoPointA[1]-geoPointC[1])
+        let geoDistMetersAC = distance(Double(geoPointA[0]),Double(geoPointA[1]),Double(geoPointC[0]),Double(geoPointC[1]))
+        print("AC \(Float(geoDistMetersAC)/distFisicaMetriAC)")
+        
+        
+        // calculating the distance in meters between a point to another (expressed in offset)
+        // it's possible to find the relative geo coordinate of such new point
+        
+        // AB to find pointAB00 geoCoordinate
+        
+        // segmets subtended by line AB
+        let dABoffx = (offsetPointA[0]-offsetPointB[0])
+        let dABoffy = (offsetPointA[1]-offsetPointB[1])
+        
+        let lengthABbyOffset = sqrt((dABoffy*dABoffy)+(dABoffx*dABoffx))
+        // rapporto di equivalenza tra geo distanza e distanza in offset
+        let ABequivalenza =  lengthABbyOffset / Float(geoDistMetersAC)
+        let distanceOffsetPoint00PointA = sqrt((offsetPointA[0]*offsetPointA[0])+(offsetPointA[1]*offsetPointA[1]))
+        let distanceInMetersPoint0PointA = distanceOffsetPoint00PointA / ABequivalenza
+        
+        let distanceOffsetPoint00PointB = sqrt((offsetPointB[0]*offsetPointB[0])+(offsetPointB[1]*offsetPointB[1]))
+        let distanceInMetersPoint0PointB = distanceOffsetPoint00PointB / ABequivalenza
+        
+        let cosALPHAangoloPoint0PointA = offsetPointA[0] / distanceOffsetPoint00PointA
+        print("0001 \(offsetPointA[0]) \(distanceOffsetPoint00PointA) \(cosALPHAangoloPoint0PointA)")
+        let cosALPHAangoloPoint0PointB = offsetPointB[0] / distanceOffsetPoint00PointB
+        print("0002 \(offsetPointB[0]) \(distanceOffsetPoint00PointB) \(cosALPHAangoloPoint0PointB)")
+        let alpha = acos(cosALPHAangoloPoint0PointA)
+        let beta  = acos(cosALPHAangoloPoint0PointB)
+        
+        var degreeAv00: Double = Double(alpha.radiansToDegrees)
+        var degreeBv00: Double = Double(beta.radiansToDegrees)
+        
+        if (degreeAv00 >= 0 && degreeAv00 <= 90) { degreeAv00 = 270 + degreeAv00 }
+        if (degreeBv00 >= 0 && degreeBv00 <= 90) { degreeBv00 = 270 + degreeBv00 }
+        
+        let point0Abview = locationWithBearing(
+            bearingRadians: degreeAv00.degreesToRadians,
+            distanceMeters: Double(distanceInMetersPoint0PointA),
+            origin: CLLocationCoordinate2D( latitude: Double(geoPointA[0]), longitude: Double(geoPointA[1]) )
+        )
+        let point0aBview = locationWithBearing(
+            bearingRadians: degreeBv00.degreesToRadians,
+            distanceMeters: Double(distanceInMetersPoint0PointB),
+            origin: CLLocationCoordinate2D( latitude: Double(geoPointB[0]), longitude: Double(geoPointB[1]) )
+        )
+        
+        // acc non funziona fose a causa del bearingRadians quindi passiamo a movedBy() più semplice perchè non richiede l'angolo in quanto opera separatamente su asse longitudinale e latitudinale
+        // =====================================================================
+        // ATTENZIONE >>> LATITUDE = asse Y, LONGITUDE = asse X !!!!!!!!!!!
+        // =====================================================================
+        
+        let dBCoffy = (offsetPointB[1]-offsetPointC[1])
+        let dBCoffx = (offsetPointB[0]-offsetPointC[0])
+        
+        let dACoffy = (offsetPointA[1]-offsetPointC[1])
+        let dACoffx = (offsetPointA[0]-offsetPointC[0])
+        
+        let fABy = dABlat / dABoffy
+        let fABx = dABlng / dABoffx
+        
+        // dABx:dABlng=ABoffx:point00lngAB
+        let y1 = offsetPointA[1] - offsetPoint00[1]
+        let y2 = y1 / dABoffy
+        let y3 = (y2 * dABlat)
+        let point00latABa = y3 + geoPointA[1]
+        
+        let x1 = offsetPointB[1] - offsetPoint00[1]
+        let x2 = x1/dABoffy
+        let x3 = (x2 * dABlat)
+        let point00latABb = x3 + geoPointB[1]
+        
+        let z1 = offsetPointA[0] - offsetPoint00[0]
+        let z2 = (z1 * fABx)
+        let point00lngABa = z2 + geoPointA[0]
+        
+        let w1 = offsetPointB[0] - offsetPoint00[0]
+        let w2 = (w1 * fABx)
+        let point00lngABb = w2 + geoPointB[0]
+        
+        
+        // =====================================================================
+        // proviamo con un approccio più semplice... utilizziamo punti A e D
+        // =====================================================================
+        
+        // punto A offset x=166 y=16  Lat 45.18779  Lng 9.15630
+        // punto D offset x=857 y=607 Lat 45.186515 Lng 9.158306
+        // distanza AD Latitude Longitude
+        
+        
+        let metersABlat = distance(Double(geoPointA[0]),Double(geoPointA[1]),Double(geoPointB[0]),Double(geoPointA[1]))
+        let metersABlng = distance(Double(geoPointB[0]),Double(geoPointA[1]),Double(geoPointB[0]),Double(geoPointB[1]))
+        
+        let metersBClat = distance(Double(geoPointB[0]),Double(geoPointB[1]),Double(geoPointC[0]),Double(geoPointB[1]))
+        let metersBClng = distance(Double(geoPointC[0]),Double(geoPointB[1]),Double(geoPointC[0]),Double(geoPointC[1]))
+   
+        let metersAClat = distance(Double(geoPointA[0]),Double(geoPointA[1]),Double(geoPointC[0]),Double(geoPointA[1]))
+        let metersAClng = distance(Double(geoPointC[0]),Double(geoPointA[1]),Double(geoPointC[0]),Double(geoPointC[1]))
+   
+        let metersADlat = distance(Double(geoPointA[0]),Double(geoPointA[1]),Double(geoPointD[0]),Double(geoPointA[1]))
+        let metersADlng = distance(Double(geoPointD[0]),Double(geoPointA[1]),Double(geoPointD[0]),Double(geoPointD[1]))
+   
+        // ricorda che geo è [lat,lng] mentre offset è [x (ovvero lng),y (ovvero lat)]
+        let lngABFactor = metersABlng / abs(Double(offsetPointA[0]-offsetPointB[0]))
+        let latABFactor = metersABlat / abs(Double(offsetPointA[1]-offsetPointB[1]))
+        let lngBCFactor = metersBClng / abs(Double(offsetPointB[0]-offsetPointC[0]))
+        let latBCFactor = metersBClat / abs(Double(offsetPointB[1]-offsetPointC[1]))
+        let lngACFactor = metersAClng / abs(Double(offsetPointA[0]-offsetPointC[0]))
+        let latACFactor = metersAClat / abs(Double(offsetPointA[1]-offsetPointC[1]))
+        let lngADFactor = metersADlng / abs(Double(offsetPointA[0]-offsetPointD[0])) // (857-166) // metri per unità orizontale
+        let latADFactor = metersADlat / abs(Double(offsetPointA[1]-offsetPointD[1]))// (607-16)  // metri per unità verticale
+        latAvgFactor    = Float((lngABFactor+lngBCFactor+lngACFactor+lngADFactor)/4)
+        lngAvgFactor    = Float((latABFactor+latBCFactor+latACFactor+latADFactor)/4)
+        
+        let meters0Alng =  lngAvgFactor * offsetPointA[0] // 166
+        let meters0Alat =  latAvgFactor * offsetPointA[1] // 16
+        
+        let meters0Blng =  lngAvgFactor * offsetPointB[0]
+        let meters0Blat =  latAvgFactor * offsetPointB[1]
+        
+        let meters0Clng =  lngAvgFactor * offsetPointC[0]
+        let meters0Clat =  latAvgFactor * offsetPointC[1]
+        
+        let meters0Dlng =  lngAvgFactor * offsetPointD[0] // 857
+        let meters0Dlat =  latAvgFactor * offsetPointD[1] // 607
+        
+        let geo0Alat = locationWithBearing(
+            bearingRadians: 0.degreesToRadians,
+            distanceMeters: Double(meters0Alat),
+            origin: CLLocationCoordinate2D( latitude: Double(geoPointA[0]), longitude: Double(geoPointA[1]) )
+        )
+        let geo0A = locationWithBearing(
+            bearingRadians: 270.degreesToRadians,
+            distanceMeters: Double(meters0Alng),
+            origin: CLLocationCoordinate2D( latitude: geo0Alat.latitude, longitude: geo0Alat.longitude )
+        )
+        let geo0Blat = locationWithBearing(
+            bearingRadians: 0.degreesToRadians,
+            distanceMeters: Double(meters0Blat),
+            origin: CLLocationCoordinate2D( latitude: Double(geoPointB[0]), longitude: Double(geoPointB[1]) )
+        )
+        let geo0B = locationWithBearing(
+            bearingRadians: 270.degreesToRadians,
+            distanceMeters: Double(meters0Blng),
+            origin: CLLocationCoordinate2D( latitude: geo0Blat.latitude, longitude: geo0Blat.longitude )
+        )
+        let geo0Clat = locationWithBearing(
+            bearingRadians: 0.degreesToRadians,
+            distanceMeters: Double(meters0Clat),
+            origin: CLLocationCoordinate2D( latitude: Double(geoPointC[0]), longitude: Double(geoPointC[1]) )
+        )
+        let geo0C = locationWithBearing(
+            bearingRadians: 270.degreesToRadians,
+            distanceMeters: Double(meters0Clng),
+            origin: CLLocationCoordinate2D( latitude: geo0Clat.latitude, longitude: geo0Clat.longitude )
+        )
+        let geo0Dlat = locationWithBearing(
+            bearingRadians: 0.degreesToRadians,
+            distanceMeters: Double(meters0Dlat),
+            origin: CLLocationCoordinate2D( latitude: Double(geoPointD[0]), longitude: Double(geoPointD[1]) )
+        )
+        let geo0D = locationWithBearing(
+            bearingRadians: 270.degreesToRadians,
+            distanceMeters: Double(meters0Dlng),
+            origin: CLLocationCoordinate2D( latitude: geo0Dlat.latitude, longitude: geo0Dlat.longitude )
+        )
+        geoPoint00.append(Float((geo0A.latitude+geo0B.latitude+geo0C.latitude+geo0D.latitude)/4))
+        geoPoint00.append(Float((geo0A.longitude+geo0B.longitude+geo0C.longitude+geo0D.longitude)/4))
+        
+        // CALCOLO PUNTO geoZZ
+        
+        distFisicaMetri00ZZlng =  lngAvgFactor * offsetPointZZ[0] // 166
+        distFisicaMetri00ZZlat =  latAvgFactor * offsetPointZZ[1] // 16
+        
+        let geoZZlat = locationWithBearing(
+            bearingRadians: 180.degreesToRadians,
+            distanceMeters: Double(distFisicaMetri00ZZlat),
+            origin: CLLocationCoordinate2D( latitude: Double(geoPoint00[0]), longitude: Double(geoPoint00[1]) )
+        )
+        let geoZZ = locationWithBearing(
+            bearingRadians: 90.degreesToRadians,
+            distanceMeters: Double(distFisicaMetri00ZZlng),
+            origin: CLLocationCoordinate2D( latitude: geoZZlat.latitude, longitude: geoZZlat.longitude )
+        )
+        geoPointZZ.append(Float(geoZZ.latitude))
+        geoPointZZ.append(Float(geoZZ.longitude))
+        
+        distFisicaMetri00ZZ = Float(distance(Double(geoPoint00[0]),Double(geoPoint00[1]),Double(geoPointZZ[0]),Double(geoPointZZ[1])))
+        return guidaImageView
+    }
+    
+    func getBasicImageReferences(_ width: Double,_ height: Double) -> [[CGFloat]] {
+        if (width == viewWidht && height == viewHeight) {
+            print("view geometry aligned \(viewWidht)x\(viewHeight) vs \(width)x\(width)")
+        }else{
+            print("view geometry not aligned \(viewWidht)x\(viewHeight) vs \(width)x\(width)")
+            viewWidht = width
+            viewHeight = height
+        }
+        
+        let xZZ = (Double(offsetPointZZ[0]) * viewWidht) / pictureWidth
+        let yZZ = (Double(offsetPointZZ[1]) * viewHeight) / pictureHeight
+        let ZZ:[CGFloat] = [CGFloat(xZZ),CGFloat(yZZ)]
+        // centraggio basata su 4 punti A,B,C,D
+        
+        let xA = (Double(offsetPointA[0]) * viewWidht) / pictureWidth
+        let yA = (Double(offsetPointA[1]) * viewHeight) / pictureHeight
+        let A:[CGFloat] = [CGFloat(xA),CGFloat(yA)]
+        let xB = (Double(offsetPointB[0]) * viewWidht) / pictureWidth
+        let yB = (Double(offsetPointB[1]) * viewHeight) / pictureHeight
+        let B:[CGFloat] = [CGFloat(xB),CGFloat(yB)]
+        let xC = (Double(offsetPointC[0]) * viewWidht) / pictureWidth
+        let yC = (Double(offsetPointC[1]) * viewHeight) / pictureHeight
+        let C:[CGFloat] = [CGFloat(xC),CGFloat(yC)]
+        let xD = (Double(offsetPointD[0]) * viewWidht) / pictureWidth
+        let yD = (Double(offsetPointD[1]) * viewHeight) / pictureHeight
+        let D:[CGFloat] = [CGFloat(xD),CGFloat(yD)]
+        return [A,B,C,D]
+    }
+    
+    func getPictureOffset( latitude: Float, longitude: Float ) -> [CGFloat] {
+        //print("0003 \(geoPoint00)")
+        let d00lng:Float = longitude - geoPoint00[1]  // delta longitude vs image 0,0
+        let d00lat:Float = geoPoint00[0] - latitude   // delta latitude vs image 0,0
+        
+        let x3 = d00lng / (geoPointZZ[1] - geoPoint00[1])
+        let x  = x3 * Float(pictureWidth)
+        
+        let y3 = d00lat / (geoPoint00[0] - geoPointZZ[0])
+        let y  = y3 * Float(pictureHeight)
+            
+        // lonA:offAx = lon:off?
+        let x1 = ((offsetPointA[0] * longitude)) / geoPointA[0]
+        let x2 = (x1 * Float(viewWidht)) / Float(pictureWidth)
+        
+        // latA:offAy = latX:offY
+        let y1 = ((offsetPointA[1] * latitude)) / geoPointA[1]
+        let y2 = (y1 * Float(viewHeight)) / Float(pictureHeight)
+        
+        if (Float(x)>=0.0 && Float(x)<=Float(pictureWidth) && Float(y)>=0.0 && Float(y)<=Float(pictureHeight)) {
+            //print("quadrante IN \(x) \(y)")
+        }else{
+            if (Float(x)>=0.0 && Float(x)<=Float(pictureWidth)) {
+                //print("quadrante OUT-y \(x) \(y)")
+            }else{
+                //print("quadrante OUT-x \(x) \(y)")
+            }
+        }
+        return [CGFloat(x),CGFloat(y)]
+    }
+    
+    func getViewOffset( x: CGFloat, y: CGFloat ) -> [CGFloat] {
+        let xout = (x / CGFloat(pictureWidth)) * CGFloat(viewWidht)
+        let yout = (y / CGFloat(pictureHeight)) * CGFloat(viewHeight)
+        
+        return [CGFloat(xout),CGFloat(yout)]
+    }
+    
+    func getGeoCoordinate( x: Double, y: Double ) -> [Float] {
+        //facile basta sostituire [0,0] con [x,y] e invocare...setBasicImageReferences...?? bohh ??
+        
+        // CALCOLO PUNTO geoQQ
+        
+        let distFisicaMetri00QQlng =  lngAvgFactor * Float(x) // 166
+        let distFisicaMetri00QQlat =  latAvgFactor * Float(y) // 16
+        
+        let geoQQlat = locationWithBearing(
+            bearingRadians: 180.degreesToRadians,
+            distanceMeters: Double(distFisicaMetri00QQlat),
+            origin: CLLocationCoordinate2D( latitude: Double(geoPoint00[0]), longitude: Double(geoPoint00[1]) )
+        )
+        let geoQQ = locationWithBearing(
+            bearingRadians: 90.degreesToRadians,
+            distanceMeters: Double(distFisicaMetri00QQlng),
+            origin: CLLocationCoordinate2D( latitude: geoQQlat.latitude, longitude: geoQQlat.longitude )
+        )
+        return [Float(geoQQ.latitude),Float(geoQQ.longitude)]
+    }
+    
+}
 extension Data {
     var hexString: String {
         return map { String(format: "%02hhx", $0) }.joined()
@@ -640,6 +1027,8 @@ struct StatusController : Codable {
     
     static var inFlight:Bool                    = false
     
+    static var OTResetRequest:Bool              = false
+    
     var vertici                                 = GuidaDataModel.vertici
     var segmenti                                = GuidaDataModel.segmenti
     var percorsi                                = GuidaDataModel.percorsi
@@ -806,6 +1195,8 @@ class Status {
     var forceReset                              = StatusController.forceReset
     
     var inFlight                                = StatusController.inFlight
+    
+    var OTResetRequest                          = StatusController.OTResetRequest
     
     var vertici                                 = GuidaDataModel.vertici
     var segmenti                                = GuidaDataModel.segmenti
