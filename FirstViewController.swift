@@ -49,65 +49,6 @@ extension UIImageView {
     }
 }
 //****************************************************************************************************//
-extension UIView {
-//MARK: Accessibility
-    
-    // https://stackoverflow.com/questions/37141598/disable-voiceover-on-uibutton-uitableviewcell-uicollectionviewcell-selection
-    
-    // https://stackoverflow.com/questions/20710991/when-voiceover-is-on-is-there-a-way-an-app-can-detect-a-single-finger-left-rig
-    // Sent after an assistive technology has set its virtual focus on the accessibility element.
-    override public func accessibilityElementDidBecomeFocused() {
-        super.accessibilityElementDidBecomeFocused()
-        
-        print(UIEvent())
-        //UIApplication.shared.sendEvent(UIEvent())
-    }
-    
-    // Sent after an assistive technology has removed its virtual focus from an accessibility element.
-    override public func accessibilityElementDidLoseFocus() {
-        super.accessibilityElementDidLoseFocus()
-        print(UIEvent())
-        //UIApplication.shared.sendEvent(UIEvent())
-    }
-    
-    
-    // Returns a Boolean value indicating whether an assistive technology is focused on the accessibility element.
-    /*
-    override public func accessibilityElementIsFocused() -> Bool {
-        super.accessibilityElementIsFocused()
-     return .....
-    }
-    */
-    
-    /*
-    override public func accessibilityAssistiveTechnologyFocusedIdentifiers() -> Set<UIAccessibility.AssistiveTechnologyIdentifier>? {
-        super.accessibilityAssistiveTechnologyFocusedIdentifiers()
-        
-        return .....
-    }
-    */
-}
-// https://developer.apple.com/documentation/uikit/uiaccessibilityreadingcontent
-//MARK: Accessibility
-// Methods that associate a unique identifier with elements in your user interface.
-protocol UIAccessibilityIdentification {
-    
-}
-//MARK: Accessibility
-// Methods to implement for an object that represents content that users read, such as a book or an article.
-protocol UIAccessibilityReadingContent {
-    
-}
-//MARK: Accessibility
-// Methods to determine when to adjust images for different content size categories.
-protocol UIAccessibilityContentSizeCategoryImageAdjusting {
-    
-}
-//MARK: Accessibility
-// Constants that describe a named context that helps identify and classify the type of text inside an element.
-struct UIAccessibilityTextualContext {
-    
-}
 //****************************************************************************************************//
 private let rFIV:CGFloat = -19.0 // it was -19 for iphone 7
 private var trimmingSession = 0
@@ -240,12 +181,12 @@ class matchFinderBeaconLvlsVsFence {
             
             print("\(self.fenceDa)")
             print("\(self.beaconDa)")
-            print(self.lvlsDa)
+            //print(self.lvlsDa)
             print("\(self.fenceA)")
             print("\(self.beaconA)")
-            print(self.lvlsA)
-            print(self.beacon1)
-            print(self.beacon2)
+            //print(self.lvlsA)
+            //print(self.beacon1)
+            //print(self.beacon2)
             
             // beacon in allontanamento minore di ...
             if (self.beacon1[4] <= Float(self.lvlsDa[1])) {
@@ -355,7 +296,7 @@ class FirstViewController: UIViewController, SFSpeechRecognizerDelegate, AVAudio
     
     static let synthesizer = AVSpeechSynthesizer()
     static var saySomethingAgain = true
-    static var utterance = AVSpeechUtterance(string: "none")
+    static var utterance = AVSpeechUtterance(string: "")
     
     
     func showMessageResetApp(){
@@ -865,18 +806,8 @@ class FirstViewController: UIViewController, SFSpeechRecognizerDelegate, AVAudio
             }else{
             
         
-                // otherwise it's time to simulate a generic GEO signal (don't used anymore)
-                //let geo:[Float] = //virtualCoordinate.getGeoCoordinate(x: Double(_x), y: Double(_y))
-                //virtualCoordinate.getGeoCoordinate(x: Double(_x), y: Double(_y))
-            
-                if (__cliccanum < __stackGEOcoord.count) {
-                    status.navigatorCockpit.forcedGEOsignal = __stackGEOcoord[__cliccanum]
-                }else{
-                    let randomInt = Int.random(in: 1...__wildGEOcoord.count)
-                    status.navigatorCockpit.forcedGEOsignal = __wildGEOcoord[randomInt - 1]
-                }
-                __cliccanum += 1
-                //PTFGIAK-MUTED print("cliccanum \(__cliccanum)")
+                
+                
             
             }
             

@@ -31,6 +31,7 @@
 import UIKit
 import CoreLocation
 import AVFoundation
+import Speech
 //let networka = zzzNavigatore<String>()  // if-then
 var topo = jsGrapher(frun: true) //mod#0004
 var _ftSIRD = Timer()
@@ -42,10 +43,9 @@ var __signalsBEACONdata:[[Any]] = []
 var __minRaggio = CLLocationDegrees(Float(99999999))
 var __minFence  = ""
 var __last_shakered_times = 0
-class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITabBarDelegate {
-    @IBOutlet weak var bannerIconView: UIImageView!
+class DestinationViewController: UIViewController, SFSpeechRecognizerDelegate, AVAudioPlayerDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITabBarDelegate, UIScrollViewDelegate {
+   
     
-    @IBOutlet weak var routeStepsTextView: UITextField!
     
     
     
@@ -351,11 +351,11 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
             }
             
         }
-        print(biu)
+        print("biu \(biu)")
         for b in biu {
             //PTFGIAK-MUTED print("beacon in use \(b)")
         }
-        print(bniu)
+        print("bniu \(bniu)")
         for b in bniu {
             print("! beacon not in use \(b)")
         }
@@ -663,6 +663,13 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
     
     @IBOutlet weak var lengthTextView: UITextField!
     
+    @IBOutlet weak var bannerIconView: UIImageView!
+    @IBOutlet weak var routeStepsTextView: UITextField!
+    
+    static let synthesizer = AVSpeechSynthesizer()
+    static var utterance = AVSpeechUtterance(string: "")
+ 
+    
     @IBAction func lengthTextView(_ sender: Any) {
     }
     
@@ -775,6 +782,19 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
     
     @IBOutlet weak var percorsoPickedView: UIPickerView!
     
+    var pvDaCntr = 0
+    var pvACntr  = 0
+    var pvCrCntr = 0
+    var pvMoCntr = 0
+    var pvPeCntr = 0
+    var forceMuteDA = false
+    var forceMuteA  = false
+    var forceMuteCR = false
+    var forceMuteMO = false
+    var forceMutePE = true
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -796,6 +816,8 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
         // Set dataSource and delegate to this class (self).
         self.daPickerView.dataSource = self
         self.daPickerView.delegate = self
+        
+        
         
         self.aPickerView.dataSource = self
         self.aPickerView.delegate = self
@@ -846,13 +868,28 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
         }
         
     }
-    
+       
     override func viewWillAppear(_ sender: Bool) {
+        forceMuteDA = true
+        forceMuteA  = true
+        forceMuteCR = true
+        forceMuteMO = true
+        forceMutePE = true
+        _ = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { timer in
+            self.forceMuteDA = false
+            self.forceMuteA  = false
+            self.forceMuteCR = false
+            self.forceMuteMO = false
+            //self.forceMutePE = false
+        }
+        
          self.view.layoutIfNeeded()
      }
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @IBOutlet weak var availableRoutes: UITextField!
+    
+    
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if (pickerView==daPickerView){
@@ -904,9 +941,7 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
     }
     
     // ptf giak to check why doesn't work/be-invoked
-    func pickerView(_ pickerView: UIPickerView,
-        titleForRow row: Int,
-        forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if (pickerView==daPickerView){
             return status.possibiliOrigini[row]
         }else{
@@ -1015,12 +1050,29 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
     
     }
     
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent  component: Int) {
-        var selection:String = ""
+    
+    
+    
+    
+    
         
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent  component: Int) {
+        // invocato al momento del rilascio del selettore dopo averlo fatto scorrere (move, spinn, roll, scrooll, ...)
+            var selection:String = ""
         if (pickerView==daPickerView){
             if (row >= status.possibiliOrigini.count){
                 return
+            }
+            
+            forceMuteA  = true
+            forceMuteCR = true
+            forceMuteMO = true
+            forceMutePE = true
+            _ = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
+                self.forceMuteA  = false
+                self.forceMuteCR = false
+                self.forceMuteMO = false
+                //self.forceMutePE = false
             }
             
             selection = status.possibiliOrigini[row] as String
@@ -1032,6 +1084,17 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
             if (pickerView==aPickerView){
                 if (row >= status.possibiliDestinazioni.count){
                     return
+                }
+                
+                forceMuteDA = true
+                forceMuteCR = true
+                forceMuteMO = true
+                forceMutePE = true
+                _ = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { timer in
+                    self.forceMuteDA = false
+                    self.forceMuteCR = false
+                    self.forceMuteMO = false
+                    self.forceMutePE = false
                 }
                 
                 selection = status.possibiliDestinazioni[row] as String
@@ -1100,11 +1163,24 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
                 
             }else{
                 if (pickerView==criteriaPickerView){
+                    if (row >= status.possibiliCriteri.count){
+                        return
+                    }
+                    
                     selection = status.possibiliCriteri[row] as String
+                    
+                    status.criterio = selection
+                    
                 }else{
                     if (pickerView==modalitaPickerView){
+                        if (row >= status.possibiliModalita.count){
+                            return
+                        }
+                                               
                         selection = status.possibiliModalita[row] as String
+                        
                         status.modalita = selection
+                        
                     }else{
                         if (pickerView==percorsoPickedView){
                             if (row >= status.percorsoSelezionato.count){
@@ -1114,6 +1190,7 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
                             selection = status.percorsoSelezionato[row] as String
                             
                         }else{
+                            
                             selection = "!"
                         }
                     }
@@ -1159,23 +1236,108 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
         return myTitle
     }
     
+    func parlaParla(_ who: String, _ testo: String, _ refreshing: Bool) {
+        let isVoiceOverRunning = (UIAccessibility.isVoiceOverRunning ? 1 : 0)
+        let isSwitchControlRunning = (UIAccessibility.isSwitchControlRunning ? 1 : 0)
+                
+        print("VoiceOver is \(isVoiceOverRunning) SwichControl is \(isSwitchControlRunning).")
+        if (refreshing || isVoiceOverRunning == 0){
+            print("!\(who) > \(testo)")
+            return
+        }
+        
+        print(" \(who) testo \(testo)")
+        DestinationViewController.synthesizer.stopSpeaking(at: AVSpeechBoundary.word /*.immediate*/)
+        
+        DestinationViewController.utterance = AVSpeechUtterance(string: "\(testo)" )    //mod#0005//added
+        DestinationViewController.utterance.voice = AVSpeechSynthesisVoice(language: status.linguaCorrente/*"it-IT"*/)                                           //mod#0005//added
+        DestinationViewController.utterance.rate = status.voiceReaderSpeed * 1.1333 // 0.45 //mod#0005//added
+        DestinationViewController.utterance.volume = status.voiceReaderVolume // 1.0 //mod#0005//added
+        DestinationViewController.synthesizer.speak(DestinationViewController.utterance) //mod#0005//added
+    }
+    
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView  {
          let pickerLabel = UILabel()
          let titleData:String
         if (pickerView==daPickerView){
             titleData = status.possibiliOrigini[row]
+            if (row == (pvDaCntr + 1)){
+                pvDaCntr = row
+                DispatchQueue.main.asyncAfter(deadline: .now()) { [self] in
+                    parlaParla("da",status.possibiliOrigini[row],forceMuteDA)
+                }
+            }else{
+                if (row == (pvDaCntr - 1)){
+                    pvDaCntr = row
+                    DispatchQueue.main.asyncAfter(deadline: .now()) { [self] in
+                        parlaParla("da",status.possibiliOrigini[row],forceMuteDA)
+                    }
+                }
+            }
         }else{
             if (pickerView==aPickerView){
                 titleData = status.possibiliDestinazioni[row]
-            }else{
+                if (row == (pvACntr + 1)){
+                    pvACntr = row
+                    DispatchQueue.main.asyncAfter(deadline: .now()) { [self] in
+                        parlaParla("a",status.possibiliDestinazioni[row],forceMuteA)
+                    }
+                }else{
+                    if (row == (pvACntr - 1)){
+                        pvACntr = row
+                        DispatchQueue.main.asyncAfter(deadline: .now()) { [self] in
+                            parlaParla("a",status.possibiliDestinazioni[row],forceMuteA)
+                        }
+                    }
+                }
+           }else{
                 if (pickerView==criteriaPickerView){
                     titleData = status.possibiliCriteri[row]
+                    if (row == (pvCrCntr + 1)){
+                        pvCrCntr = row
+                        DispatchQueue.main.asyncAfter(deadline: .now()) { [self] in
+                            parlaParla("cr",status.possibiliCriteri[row],forceMuteCR)
+                        }
+                    }else{
+                        if (row == (pvCrCntr - 1)){
+                            pvCrCntr = row
+                            DispatchQueue.main.asyncAfter(deadline: .now()) { [self] in
+                                parlaParla("cr",status.possibiliCriteri[row],forceMuteCR)
+                            }
+                        }
+                    }
                 }else{
                     if (pickerView==modalitaPickerView){
                         titleData = status.possibiliModalita[row]
+                        if (row == (pvMoCntr + 1)){
+                            pvMoCntr = row
+                            DispatchQueue.main.asyncAfter(deadline: .now()) { [self] in
+                                parlaParla("mo",status.possibiliModalita[row],forceMuteMO)
+                            }
+                        }else{
+                            if (row == (pvMoCntr - 1)){
+                                pvMoCntr = row
+                                DispatchQueue.main.asyncAfter(deadline: .now()) { [self] in
+                                    parlaParla("mo",status.possibiliModalita[row],forceMuteMO)
+                                }
+                            }
+                        }
                     }else{
                         if (pickerView==percorsoPickedView){
                             titleData = status.percorsoSelezionato[row]
+                            if (row == (pvPeCntr + 1)){
+                                pvPeCntr = row
+                                DispatchQueue.main.asyncAfter(deadline: .now()) { [self] in
+                                    parlaParla("pe",status.percorsoSelezionato[row],forceMutePE)
+                                }
+                            }else{
+                                if (row == (pvPeCntr - 1)){
+                                    pvPeCntr = row
+                                    DispatchQueue.main.asyncAfter(deadline: .now()) { [self] in
+                                        parlaParla("pe",status.percorsoSelezionato[row],forceMutePE)
+                                    }
+                                }
+                            }
                         }else{
                             titleData = "!"
                         }
@@ -1391,7 +1553,7 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
         }
         
         // force auto-located in the destination menu (not reversible without an app reset or restart)
-        if (__minFence != "" && __minFence != status.possibiliOrigini[0]) {
+        if (status.autoLocation && __minFence != "" && __minFence != status.possibiliOrigini[0]) {
             
             AudioServicesPlaySystemSound (codifiedBeeps[autoLocationResolved])
             // present just the first outcome of the first run of the auto-location algorithm
@@ -1409,11 +1571,13 @@ class DestinationViewController: UIViewController, UIPickerViewDelegate, UIPicke
             
             //mod#0001//patch sucessiva al test con Roobi per semplificare utilizzo dei selettori
             
-            personalSettingsViewController.utterance = AVSpeechUtterance(string: "\(__minFence) \(NSLocalizedString("vce-ut10-b01",comment: "autoDetectionPosition"))" )    //mod#0001//added
-            personalSettingsViewController.utterance.voice = AVSpeechSynthesisVoice(language: status.linguaCorrente/*"it-IT"*/)                                           //mod#0001//added
-            personalSettingsViewController.utterance.rate = status.voiceReaderSpeed // 0.45 //mod#0001//added
-            personalSettingsViewController.utterance.volume = status.voiceReaderVolume // 1.0 //mod#0001//added
-            personalSettingsViewController.synthesizer.speak(personalSettingsViewController.utterance) //mod#0001//added
+            DestinationViewController.utterance = AVSpeechUtterance(string: "\(__minFence) \(NSLocalizedString("vce-ut10-b01",comment: "autoDetectionPosition"))" )    //mod#0001//added
+            DestinationViewController.utterance.voice = AVSpeechSynthesisVoice(language: status.linguaCorrente/*"it-IT"*/)                                           //mod#0001//added
+            DestinationViewController.utterance.rate = status.voiceReaderSpeed // 0.45 //mod#0001//added
+            DestinationViewController.utterance.volume = status.voiceReaderVolume // 1.0 //mod#0001//added
+            DestinationViewController.synthesizer.speak(DestinationViewController.utterance) //mod#0001//added
+            status.autoLocation = false
+             
         }
     }
     

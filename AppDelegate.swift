@@ -2649,7 +2649,7 @@ func catchNotificationRoute(notification:Notification) -> Void {
             var _routeIndex = 0
             for (nipc,ipc) in status.indicazioniPercorsi.enumerated() {
                 if (ipc.id==status.selectedArea){
-                    print(ipc.indicazioni.count)
+                    //print(ipc.indicazioni.count)
                     if (ipc.indicazioni.count > 1) {
                         // qui devo trovare quale percorso attivare tra quelli disponibili
                         // nel farlo cerco il primo percorso che copra tutti i punti del percorso tecnico
@@ -2755,7 +2755,7 @@ func catchNotificationRoute(notification:Notification) -> Void {
             _routeSettings.msg999A = "hai raggiunto la destinazione selezionata."
             for (nipc,ipc) in status.indicazioniPercorsi.enumerated() {
                 if (ipc.id==status.selectedArea){
-                    print(ipc.indicazioni[_routeIndex])
+                    //print(ipc.indicazioni[_routeIndex])
                     for indicazionePercorso in ipc.indicazioni[_routeIndex] {
                         if (indicazionePercorso.from == "WILD" && indicazionePercorso.to == "WILD"){
                             _routeSettings.msg000A = indicazionePercorso.msg[0].text
@@ -2782,8 +2782,8 @@ func catchNotificationRoute(notification:Notification) -> Void {
             var progressivo = 0
             var prevAlias = ""
             var _npt = 0
-            print(status.percorsoSelezionato)
-            print(status.percorsoTecnico)
+            //print(status.percorsoSelezionato)
+            //print(status.percorsoTecnico)
             for (npt, tappa) in status.percorsoTecnico.enumerated() {
                 for fc in status.fencingConfiguration {
                     if (fc.id==status.selectedArea){
@@ -2803,7 +2803,7 @@ func catchNotificationRoute(notification:Notification) -> Void {
                                 var testo = "testo #\(progressivo) mancante"
                                 for (nipc,ipc) in status.indicazioniPercorsi.enumerated() {
                                     if (ipc.id==status.selectedArea) {
-                                        print(ipc.indicazioni[_routeIndex])
+                                        //print(ipc.indicazioni[_routeIndex])
                                         for indicazionePercorso in ipc.indicazioni[_routeIndex] {
                                             if (_npt==0 && indicazionePercorso.from == _routeSettings.enclave && indicazionePercorso.to == fence.alias){
                                                 testo = indicazionePercorso.msg[0].text
@@ -4118,7 +4118,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     GuidaDataModel.zRTV.append(Float(zrtv))
                 }
                 status.zRTV = GuidaDataModel.zRTV
-                print(status.zRTV)
+                print("status.zRTV \(status.zRTV)")
                 if (wrote==0){
                     status.voiceReaderSpeed = Float(_t1!.2.voiceSpeed)
                     print(status.voiceReaderSpeed)
@@ -4195,9 +4195,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
                 if (_t1!.3.id==_t1!.4.id && _t1!.3.uuid==_t1!.4.uuid && _t1!.4.id==_t1!.2.area){
                     for segment in _t1!.4.segmentsTuning {
-                        print(segment)
+                        //print(segment)
                         for (nrst,rst) in status.forcedRouteSegmentsTuning.enumerated() {
-                            print(rst)
+                            print("rst \(rst)")
                         }
                         let damjr = Double(estraiNumero(segment.da, "@", "-"))
                         let damnr = Double(estraiNumero(segment.da, "-", "@"))
@@ -4212,7 +4212,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     for beacon in _t1!.4.beaconsTuning {
                         print(beacon)
                         for (nbt,bt) in status.forcedBeaconsTuning.enumerated() {
-                            print(bt)
+                            print("bt \(bt)")
                         }
                         let mjr = Double(estraiNumero(beacon.id, "@", "-"))
                         let mnr = Double(estraiNumero(beacon.id, "-", "@"))
@@ -4413,7 +4413,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                 for t2 in tmp2 {
                                     tmp1.append(t2)
                                 }
-                                print(tmp1)
+                                //print(tmp1)
                                 status.indicazioniPercorsi[nipc].indicazioni[subPath].append(
                                     IndicazionePercorsoSingoloTratto(from: indicazionePercorso.from, to: indicazionePercorso.to, comment: indicazionePercorso.comment, msg: tmp1, inUseFlag: false))
                                 print("add segment to route #\(subPath) \(indicazionePercorso.from) > \(indicazionePercorso.to)")
@@ -4433,7 +4433,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             for fence in _t1!.5.fences {
                                 if (fence.id == dest) {
                                     status.destinazioniAttivate.append(dest)
-                                    print(dest)
+                                    print("dest \(dest)")
                                 }
                             }
                             if (!status.destinazioniAttivate.contains(dest)){
@@ -4451,7 +4451,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             for fence in _t1!.5.fences {
                                 if (fence.id == part) {
                                     status.originiAttivate.append(part)
-                                    print(part)
+                                    print("part \(part)")
                                 }
                             }
                             if (!status.originiAttivate.contains(part)){

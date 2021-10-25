@@ -31,7 +31,7 @@
 let lista = ["femminile","maschile"]
 import UIKit
 import Speech
-class personalSettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class personalSettingsViewController: UIViewController, SFSpeechRecognizerDelegate, AVAudioPlayerDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
     @IBOutlet weak var voiceCharacterLbaleView: UILabel!
     @IBOutlet weak var voiceCharactersPickerView: UIPickerView!
@@ -50,8 +50,8 @@ class personalSettingsViewController: UIViewController, UIPickerViewDelegate, UI
     
     
     static let synthesizer = AVSpeechSynthesizer()
-    static var saySomethingAgain = true
-    static var utterance = AVSpeechUtterance(string: "none")
+    static var utterance = AVSpeechUtterance(string: "")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
                 
@@ -123,12 +123,18 @@ class personalSettingsViewController: UIViewController, UIPickerViewDelegate, UI
                 text = NSLocalizedString("vce-ut01-a02",comment: "voiceSetting")
         }
         voiceReadVolumeSlideView.progress = status.voiceReaderVolume
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            personalSettingsViewController.utterance = AVSpeechUtterance(string: String(format:"%.1f \(text)", status.voiceReaderVolume) /*NSLocalizedString("vce-ut01-a01",comment: "voiceSetting")*/ )
-            personalSettingsViewController.utterance.voice = AVSpeechSynthesisVoice(language: status.linguaCorrente/*"it-IT"*/)
-            personalSettingsViewController.utterance.rate = status.voiceReaderSpeed // 0.45
-            personalSettingsViewController.utterance.volume = status.voiceReaderVolume // 1.0
-            personalSettingsViewController.synthesizer.speak(personalSettingsViewController.utterance)
+        
+        let isVoiceOverRunning = (UIAccessibility.isVoiceOverRunning ? 1 : 0)
+        let isSwitchControlRunning = (UIAccessibility.isSwitchControlRunning ? 1 : 0)
+        
+        if (isVoiceOverRunning == 1){
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                personalSettingsViewController.utterance = AVSpeechUtterance(string: String(format:"%.1f \(text)", status.voiceReaderVolume) /*NSLocalizedString("vce-ut01-a01",comment: "voiceSetting")*/ )
+                personalSettingsViewController.utterance.voice = AVSpeechSynthesisVoice(language: status.linguaCorrente/*"it-IT"*/)
+                personalSettingsViewController.utterance.rate = status.voiceReaderSpeed // 0.45
+                personalSettingsViewController.utterance.volume = status.voiceReaderVolume // 1.0
+                personalSettingsViewController.synthesizer.speak(personalSettingsViewController.utterance)
+            }
         }
         
     }
@@ -160,12 +166,18 @@ class personalSettingsViewController: UIViewController, UIPickerViewDelegate, UI
                 text = NSLocalizedString("vce-ut02-a02",comment: "voiceSetting")
         }
         voiceReaderSpeedSliderView.progress = status.voiceReaderSpeed
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            personalSettingsViewController.utterance = AVSpeechUtterance(string: String(format:"%.1f \(text)", status.voiceReaderSpeed)  /*NSLocalizedString("vce-ut02-a01",comment: "voiceSetting")*/ )
-            personalSettingsViewController.utterance.voice = AVSpeechSynthesisVoice(language: status.linguaCorrente/*"it-IT"*/)
-            personalSettingsViewController.utterance.rate = status.voiceReaderSpeed // 0.45
-            personalSettingsViewController.utterance.volume = status.voiceReaderVolume // 1.0
-            personalSettingsViewController.synthesizer.speak(personalSettingsViewController.utterance)
+        
+        let isVoiceOverRunning = (UIAccessibility.isVoiceOverRunning ? 1 : 0)
+        let isSwitchControlRunning = (UIAccessibility.isSwitchControlRunning ? 1 : 0)
+        
+        if (isVoiceOverRunning == 1){
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                personalSettingsViewController.utterance = AVSpeechUtterance(string: String(format:"%.1f \(text)", status.voiceReaderSpeed)  /*NSLocalizedString("vce-ut02-a01",comment: "voiceSetting")*/ )
+                personalSettingsViewController.utterance.voice = AVSpeechSynthesisVoice(language: status.linguaCorrente/*"it-IT"*/)
+                personalSettingsViewController.utterance.rate = status.voiceReaderSpeed // 0.45
+                personalSettingsViewController.utterance.volume = status.voiceReaderVolume // 1.0
+                personalSettingsViewController.synthesizer.speak(personalSettingsViewController.utterance)
+            }
         }
     }
     
@@ -196,12 +208,18 @@ class personalSettingsViewController: UIViewController, UIPickerViewDelegate, UI
                 text = NSLocalizedString("vce-ut03-a02",comment: "voiceSetting")
          }
         voiceReaderPaceingSliderView.progress = status.voiceReaderPaceing
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            personalSettingsViewController.utterance = AVSpeechUtterance(string: String(format:"%.1f \(text)", status.voiceReaderPaceing) /*NSLocalizedString("vce-ut03-a01",comment: "voiceSetting")*/ )
-            personalSettingsViewController.utterance.voice = AVSpeechSynthesisVoice(language: status.linguaCorrente/*"it-IT"*/)
-            personalSettingsViewController.utterance.rate = status.voiceReaderSpeed // 0.45
-            personalSettingsViewController.utterance.volume = status.voiceReaderVolume // 1.0
-            personalSettingsViewController.synthesizer.speak(personalSettingsViewController.utterance)
+        
+        let isVoiceOverRunning = (UIAccessibility.isVoiceOverRunning ? 1 : 0)
+        let isSwitchControlRunning = (UIAccessibility.isSwitchControlRunning ? 1 : 0)
+        
+        if (isVoiceOverRunning == 1){
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                personalSettingsViewController.utterance = AVSpeechUtterance(string: String(format:"%.1f \(text)", status.voiceReaderPaceing) /*NSLocalizedString("vce-ut03-a01",comment: "voiceSetting")*/ )
+                personalSettingsViewController.utterance.voice = AVSpeechSynthesisVoice(language: status.linguaCorrente/*"it-IT"*/)
+                personalSettingsViewController.utterance.rate = status.voiceReaderSpeed // 0.45
+                personalSettingsViewController.utterance.volume = status.voiceReaderVolume // 1.0
+                personalSettingsViewController.synthesizer.speak(personalSettingsViewController.utterance)
+            }
         }
     }
     
@@ -231,37 +249,43 @@ class personalSettingsViewController: UIViewController, UIPickerViewDelegate, UI
         voiceRepetitionsSliderView.progress = status.voiceRepetitions
         let tt = Double(String(format:"%.1f", status.voiceRepetitions))
         print("tt \(tt)")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            var vrn = ""
-            if (tt == 0) {
-                vrn = "0"
-                status.voiceRepetitions = 0
-            }else{
-                let mRN = tt
-                let dMRN:Double = Double(String(format:"%.1f", mRN as! CVarArg))!
-                if (dMRN >= 1.0) {
-                    vrn = "5"
+        
+        let isVoiceOverRunning = (UIAccessibility.isVoiceOverRunning ? 1 : 0)
+        let isSwitchControlRunning = (UIAccessibility.isSwitchControlRunning ? 1 : 0)
+        
+        if (isVoiceOverRunning == 1){
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                var vrn = ""
+                if (tt == 0) {
+                    vrn = "0"
+                    status.voiceRepetitions = 0
                 }else{
-                    if (dMRN >= 0.8) {
-                        vrn = "4"
+                    let mRN = tt
+                    let dMRN:Double = Double(String(format:"%.1f", mRN as! CVarArg))!
+                    if (dMRN >= 1.0) {
+                        vrn = "5"
                     }else{
-                        if (dMRN >= 0.6) {
-                            vrn = "3"
+                        if (dMRN >= 0.8) {
+                            vrn = "4"
                         }else{
-                            if (dMRN >= 0.4) {
-                                vrn = "2"
+                            if (dMRN >= 0.6) {
+                                vrn = "3"
                             }else{
-                                vrn = "1"
+                                if (dMRN >= 0.4) {
+                                    vrn = "2"
+                                }else{
+                                    vrn = "1"
+                                }
                             }
                         }
                     }
                 }
+                personalSettingsViewController.utterance = AVSpeechUtterance(string: "\(vrn)  \(NSLocalizedString("vce-ut04-a01",comment: "voiceSetting"))" )
+                personalSettingsViewController.utterance.voice = AVSpeechSynthesisVoice(language: status.linguaCorrente/*"it-IT"*/)
+                personalSettingsViewController.utterance.rate = status.voiceReaderSpeed // 0.45
+                personalSettingsViewController.utterance.volume = status.voiceReaderVolume // 1.0
+                personalSettingsViewController.synthesizer.speak(personalSettingsViewController.utterance)
             }
-            personalSettingsViewController.utterance = AVSpeechUtterance(string: "\(vrn)  \(NSLocalizedString("vce-ut04-a01",comment: "voiceSetting"))" )
-            personalSettingsViewController.utterance.voice = AVSpeechSynthesisVoice(language: status.linguaCorrente/*"it-IT"*/)
-            personalSettingsViewController.utterance.rate = status.voiceReaderSpeed // 0.45
-            personalSettingsViewController.utterance.volume = status.voiceReaderVolume // 1.0
-            personalSettingsViewController.synthesizer.speak(personalSettingsViewController.utterance)
         }
         
     }
