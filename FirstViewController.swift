@@ -1923,52 +1923,14 @@ class FirstViewController: UIViewController, SFSpeechRecognizerDelegate, AVAudio
         
         var urlaUrlaCheTiPassa = daGridare
         
-        //gestisco gergo like %a ore 3%
-        var cntloop = 0
-        while (urlaUrlaCheTiPassa.contains("%") && cntloop < 100) {
-            let parteVariabile = estraiStringa(urlaUrlaCheTiPassa, "%", "%")
-            var done = false
-            for w in GuidaDataModel.gergoX where cntloop < 100 {
-                if (w[0].lowercased()==parteVariabile.lowercased()){
-                    urlaUrlaCheTiPassa = urlaUrlaCheTiPassa.replacingOccurrences(of: "%\(parteVariabile)%",with: w[2])
-                    done = true
-                    break
-                }
-                cntloop += 1
-            }
-            if (!done){
-                urlaUrlaCheTiPassa = urlaUrlaCheTiPassa.replacingOccurrences(of: "%\(parteVariabile)%",with: "")
-            }
-            cntloop += 1
-        }
         
-        //gestisco comandi speciali like &delay=5&
-        cntloop = 0
-        while (urlaUrlaCheTiPassa.contains("&") && cntloop < 100) {
-            let parteVariabile = estraiStringa(urlaUrlaCheTiPassa, "&", "&")
-            var done = false
-            for c in GuidaDataModel.commandX where cntloop < 100 {
-                if (parteVariabile.lowercased().starts(with: c.lowercased())) {
-                    urlaUrlaCheTiPassa = urlaUrlaCheTiPassa.replacingOccurrences(of: "&\(parteVariabile)&",with: "")
-                    done = true
-                    break
-                }
-                cntloop += 1
-            }
-            if (!done){
-                urlaUrlaCheTiPassa = urlaUrlaCheTiPassa.replacingOccurrences(of: "&\(parteVariabile)&",with: "")
-            }
-            cntloop += 1
-        }
         
-        //gestisco &.key values
+        
+        
         var cosaDire = urlaUrlaCheTiPassa
         var parteFissa = urlaUrlaCheTiPassa
-        while (parteFissa.contains("&.")) {
-            let parteVariabile = estraiStringa(parteFissa, "&.", " ")
-            parteFissa = parteFissa.replacingOccurrences(of: "&.\(parteVariabile)", with: "key")
-            cosaDire = cosaDire.replacingOccurrences(of: "&.", with: "")
-        }
+        
+        
         
         if (toErase.count>0){
             if (toErase.lowercased()=="all".lowercased()){
@@ -2043,7 +2005,7 @@ class FirstViewController: UIViewController, SFSpeechRecognizerDelegate, AVAudio
             FirstViewController.utterance.rate = status.voiceReaderSpeed // 0.50 // 0.66
             FirstViewController.utterance.volume = status.voiceReaderVolume // 0.75
             
-            /* You can omit the rate property entirely to have a natural-speed voice, or change the language to "en-US" (English, American accent), "en-IE" (English, Irish accent), "en-AU" (English, Australian accent) or whichever other accents Apple chooses to add in the future. */
+            
             
             // tento sostituzione messaggi vocali con suoni systemSoundiD or beep
             var beeppato = false
@@ -2080,8 +2042,11 @@ class FirstViewController: UIViewController, SFSpeechRecognizerDelegate, AVAudio
                 }
                 
                 progressiveDelay += 3.0
+                
             }else{
+                
                 progressiveDelay += 1.0
+                
             }
              
         }

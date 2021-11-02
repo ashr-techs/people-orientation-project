@@ -214,7 +214,7 @@ class SigninViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         setUserControlFlags()
-        updateConfigurationInPlace()
+        updateConfigurationInPlace("ok")
         //////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         
@@ -227,9 +227,12 @@ class SigninViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     
     override func viewWillAppear(_ sender: Bool) {
         // explicitly called by resetButton action to refresh the view
+        // ...updateConfigurationInPlace will result called twice due to "reset"
+        // option introduced to force config-deleting after reset button pressed
+        // ...but this is not a problem at all.
         
         setUserControlFlags()
-        updateConfigurationInPlace()
+        updateConfigurationInPlace("ok")
         
      }
     
@@ -237,7 +240,7 @@ class SigninViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     override func viewDidAppear(_ sender: Bool) {
         setUserControlFlags()
         
-        updateConfigurationInPlace()
+        updateConfigurationInPlace("ok")
         
     }
     */
@@ -289,8 +292,9 @@ class SigninViewController: UIViewController, UIPickerViewDelegate, UIPickerView
 }
 extension SigninViewController {  // ViewController
     
-    func updateConfigurationInPlace() {
+    func updateConfigurationInPlace(_ specificAction: String) {
                 let defaultsDataStore = UserDefaults.standard
+        
         
         
         //
@@ -612,6 +616,7 @@ extension SigninViewController {  // ViewController
         configURLTextView.isUserInteractionEnabled = true
         configURLTextView.isEnabled = true
         
+        updateConfigurationInPlace("reset")
         self.viewWillAppear(true)
      }
     
@@ -744,26 +749,26 @@ extension SigninViewController {    // ViewController
     
     @objc func aboutThisAppReaded(){
          setUserControlFlags()
-        updateConfigurationInPlace()
+        updateConfigurationInPlace("ok")
          
      }
     
     @objc func instructionsReaded(){
          setUserControlFlags()
-        updateConfigurationInPlace()
+        updateConfigurationInPlace("ok")
          
      }
          
     
     @objc func privacyAccepted(){
           setUserControlFlags()
-        updateConfigurationInPlace()
+        updateConfigurationInPlace("ok")
           
       }
       
       @objc func disclamerAccepted(){
          setUserControlFlags()
-        updateConfigurationInPlace()
+        updateConfigurationInPlace("ok")
       }
       
      

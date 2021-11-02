@@ -683,9 +683,9 @@ let availableOperativityMode = ["anonimate"]
 let availableUserCharacters = ["any"]
 let availableModalita = ["on-premise","pre-simulation"]
 let availableCriteri = ["shortest"]
-let availableBeacon = 50
-let availableFence = 50
-let availableRoute = 5
+let availableBeacon = 50                    // pay attention to resource consumption !!!
+let availableFence = 50                     // pay attention to resource consumption !!!
+let availableRoute = availableFence / 2     // pay attention to resource consumption !!!
 //---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---*---//
 struct PercorsoInPlace {
     var percorsoSelezionato:[String]
@@ -768,7 +768,7 @@ struct SceneModel {
     var scene2:UIImage? = nil
 }
 struct GuidaDataModel {
-    static let versionSuppModes =   ["b084-20211020"]             //ptf-210109
+    static let versionSuppModes =   ["b085-20211102"]             //ptf-210109
     
     static var operatingFeatures =  ["Beacon"
                                      
@@ -799,46 +799,10 @@ struct GuidaDataModel {
                                     "shake"]
     
     
-    static var gergoX =        [["a ore 1","a Nord Nord-Est","leggermente a destra"],
-                                ["a ore 2","a Nord-Est","leggermente a destra"],
-                                ["a ore 3","a Est","a destra"],
-                                ["a ore 4","a Est Sud-Est","a destra e leggermente indietro"],
-                                ["a ore 5","a Sud-Est","indietro a destra"],
-                                ["a ore 6","a Sud","indietro"],
-                                ["a ore 7","a Sud-Ovest","indietro a sinistra"],
-                                ["a ore 8","a Ovest Sud-Ovest","a sinistra e leggermente indietro"],
-                                ["a ore 9","a Ovest","a sinistra"],
-                                ["a ore 10","a Nord-Ovest","leggermente a sinistra"],
-                                ["a ore 11","a Nord Nord-Ovest","leggermente a sinistra"],
-                                ["a ore 12","a Nord","dritto"],
-                                ["ore 1","Nord Nord-Est","leggermente a destra"],
-                                ["ore 2","Nord-Est","leggermente a destra"],
-                                ["ore 3","Est","destra"],
-                                ["ore 4","Est Sud-Est","destra e leggermente indietro"],
-                                ["ore 5","Sud-Est","indietro a destra"],
-                                ["ore 6","Sud","indietro"],
-                                ["ore 7","Sud-Ovest","indietro a sinistra"],
-                                ["ore 8","Ovest Sud-Ovest","sinistra e leggermente indietro"],
-                                ["ore 9","Ovest","sinistra"],
-                                ["ore 10","Nord-Ovest","leggermente a sinistra"],
-                                ["ore 11","Nord Nord-Ovest","leggermente a sinistra"],
-                                ["ore 12","Nord","dritto"]]
     
-    static var oriX =          ["prosegui", // ore 12/0
-                                "prosegui", // ore 1
-                                "svolta %a ore 3%", // ore 2
-                                "svolta %a ore 3%", // ore 3
-                                "svolta %a ore 3%", // ore 4
-                                ".", // ore 5
-                                ".", // ore 6
-                                ".", // ore 7
-                                "svolta %a ore 9%", // ore 8
-                                "svolta %a ore 9%", // ore 9
-                                "svolta %a ore 9%", // ore 10
-                                "prosegui"  // ore 11
-                                ]
     
-    static var commandX =       ["delay=","more="]
+    
+    
     
     
     static let managedAreas =       ["UNIPVSP"
@@ -1025,6 +989,8 @@ struct StatusController : Codable {
     
     static var forceReset:Bool                  = false
     
+    static var forceExit:Int                    = 0
+    
     static var inFlight:Bool                    = false
     
     static var OTResetRequest:Bool              = false
@@ -1036,6 +1002,7 @@ struct StatusController : Codable {
     // fix 20211020 - steps to be strictly performed just one time or under a predeterminated sequence 0 to .... n
     static var fireTimingClock                  = 0
     static var fireTimingSniffInsideRetrievedData = 0
+    static var fireTimingMonitorForIssues       = 0
     static var fireTimingSignalProcessor        = 0
     static var fireTimingPreSimulator           = 0
     static var fireTimingNavigatorCockpit       = 0
@@ -1194,6 +1161,8 @@ class Status {
     
     var forceReset                              = StatusController.forceReset
     
+    var forceExit                               = StatusController.forceExit
+    
     var inFlight                                = StatusController.inFlight
     
     var OTResetRequest                          = StatusController.OTResetRequest
@@ -1223,6 +1192,7 @@ class Status {
     // fix 20211020 - steps to be strictly performed just one time or under a predeterminated sequence 0 to .... n
     var fireTimingClock                         = StatusController.fireTimingClock
     var fireTimingSniffInsideRetrievedData      = StatusController.fireTimingSniffInsideRetrievedData
+    var fireTimingMonitorForIssues              = StatusController.fireTimingMonitorForIssues
     var fireTimingSignalProcessor               = StatusController.fireTimingSignalProcessor
     var fireTimingPreSimulator                  = StatusController.fireTimingPreSimulator
     var fireTimingNavigatorCockpit              = StatusController.fireTimingNavigatorCockpit
@@ -2571,6 +2541,94 @@ func geo2beacon(_ geo:CLLocation ) -> String {
     return beaconUnderTheGeoCoordinates
     
 }
+func routePreCheckingByStart2EndPoints(_ inizio:String, _ fine:String) -> Int {
+    
+    
+    var _numTappe = 99999
+    var _routeIndex = -1
+    for (nipc,ipc) in status.indicazioniPercorsi.enumerated() {
+        if (ipc.id==status.selectedArea){
+            //print(ipc.indicazioni.count)
+            
+                
+                let inzfn = [inizio,fine]
+                var _fnd = false
+                for (nip, indicazioniPercorso) in ipc.indicazioni.enumerated() {
+                    var _npt = 0
+                    var _enclave = ""
+                    var _baseOrdinal = 2
+                    for (npt, tappa) in inzfn.enumerated() where npt > 0 {
+                        // verifico se da-a sono definiti come fence
+                        var _da = ""
+                        var _a = ""
+                        for fc in status.fencingConfiguration {
+                            if (fc.id==status.selectedArea){
+                                for fence in fc.fences {
+                                    if (fence.id.contains(inzfn[npt-1])) {
+                                        _da = fence.alias
+                                    }
+                                    if (fence.id.contains(inzfn[npt])) {
+                                        _a = fence.alias
+                                    }
+                                    if (_da != "" && _a != "") { break }
+                                }
+                                if (_da != "" && _a != "") { break }
+                            }
+                            if (_da != "" && _a != "") { break }
+                        }
+                        // se da-a esistono come fence ... allora ....
+                        if (_da != "" && _a != ""){
+                            for (nipso,indicazionePercorso) in indicazioniPercorso.enumerated() {
+                                if (indicazionePercorso.from == "WILD" && indicazionePercorso.to == "WILD"){
+                                    // nothing to do
+                                }else{
+                                    if (_enclave == ""
+                                        && indicazionePercorso.from == "WILD"
+                                        && indicazionePercorso.to != "WILD"){
+                                        _enclave = indicazionePercorso.to
+                                    }else{
+                                        if (indicazionePercorso.from == _enclave
+                                            && indicazionePercorso.to == _da){
+                                            _enclave = "!£$%&/()=?^"  // lo conto solo una volta
+                                            _npt += 1
+                                        }else{
+                                            if (_enclave == "!£$%&/()=?^" &&
+                                                indicazionePercorso.to == _a){
+                                                
+                                                
+                                                
+                                                _npt += 2
+                                                break
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        _baseOrdinal += (npt * (npt+2))
+                        print("route checking \(_npt) \(nip) \(_fnd) \(inizio) \(fine)")
+                        if (_npt == 3){
+                            _routeIndex = nip
+                            _fnd = true
+                            break
+                        }
+                    }
+                    if (_fnd){
+                        break
+                    }
+                }
+                if (_fnd){
+                    break
+                }
+                
+            
+        }
+    }
+    
+    print("route checking \(inizio) \(fine) \(_routeIndex)")
+    return _routeIndex
+    
+}
 func catchNotificationRoute(notification:Notification) -> Void {
   guard let name = notification.userInfo!["name"] else { return }
     
@@ -2645,19 +2703,23 @@ func catchNotificationRoute(notification:Notification) -> Void {
             
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             
+            
             var _numTappe = 99999
             var _routeIndex = 0
             for (nipc,ipc) in status.indicazioniPercorsi.enumerated() {
                 if (ipc.id==status.selectedArea){
                     //print(ipc.indicazioni.count)
-                    if (ipc.indicazioni.count > 1) {
-                        // qui devo trovare quale percorso attivare tra quelli disponibili
-                        // nel farlo cerco il primo percorso che copra tutti i punti del percorso tecnico
+                    
+                        
+                        
+                    
                         var fnd = false
                         for (nip, indicazioniPercorso) in ipc.indicazioni.enumerated() {
                             var _npt = 0
                             var _enclave = ""
+                            var _baseOrdinal = 2
                             for (npt, tappa) in status.percorsoTecnico.enumerated() where npt > 0 {
+                                // verifico se da-a sono definiti come fence
                                 var _da = ""
                                 var _a = ""
                                 for fc in status.fencingConfiguration {
@@ -2675,33 +2737,42 @@ func catchNotificationRoute(notification:Notification) -> Void {
                                     }
                                     if (_da != "" && _a != "") { break }
                                 }
-                                for indicazionePercorso in indicazioniPercorso {
-                                    if (indicazionePercorso.from == "WILD" && indicazionePercorso.to == "WILD"){
-                                        // nothing to do
-                                    }else{
-                                        if (_enclave == ""
-                                            && indicazionePercorso.from == "WILD"
-                                            && indicazionePercorso.to != "WILD"){
-                                            _enclave = indicazionePercorso.to
+                                // se da-a esistono come fence ... allora ....
+                                if (_da != "" && _a != ""){
+                                    for (nipso,indicazionePercorso) in indicazioniPercorso.enumerated() {
+                                        if (indicazionePercorso.from == "WILD" && indicazionePercorso.to == "WILD"){
+                                            // nothing to do
                                         }else{
-                                            if (indicazionePercorso.from == _enclave
-                                                && indicazionePercorso.to == _da){
-                                                _enclave = "!£$%&/()=?^"  // lo conto solo una volta
-                                                _npt += 1
-                                                break
+                                            if (_enclave == ""
+                                                && indicazionePercorso.from == "WILD"
+                                                && indicazionePercorso.to != "WILD"){
+                                                _enclave = indicazionePercorso.to
                                             }else{
-                                                if (indicazionePercorso.from == _da && indicazionePercorso.to == _a){
-                                                    _npt += 1
-                                                    break
+                                                if (indicazionePercorso.from == _enclave
+                                                    && indicazionePercorso.to == _da){
+                                                    _enclave = "!£$%&/()=?^"  // lo conto solo una volta
+                                                    _npt = (npt * nipso)
+                                                    //break
+                                                }else{
+                                                    if (_enclave == "!£$%&/()=?^" &&
+                                                        indicazionePercorso.from == _da && indicazionePercorso.to == _a){
+                                                        
+                                                        //moltiplicare x ordinale >> npt e nipso
+                                                        _npt += (npt * nipso)
+                                                        break
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
+                                _baseOrdinal += (npt * (npt+2))
                             }
-                            //print(_npt)
-                            //print(status.percorsoTecnico.count)
-                            if (_npt == (status.percorsoTecnico.count - 1)) {
+                            print(_baseOrdinal)
+                            print(_npt)
+                            print(status.percorsoTecnico.count)
+                            if (_npt == _baseOrdinal) {
+                                
                                 print("route found \(_npt) \(nip) \(_numTappe) \(indicazioniPercorso.count)")
                                 if (_numTappe > indicazioniPercorso.count){
                                     print("route replaced \(_npt) \(_routeIndex) \(nip) \(_numTappe) \(indicazioniPercorso.count)")
@@ -2717,12 +2788,15 @@ func catchNotificationRoute(notification:Notification) -> Void {
                             }
                         }
                         if (!fnd){
-                            status.forceQuit = true //showMessageResetApp()
+                            status.forceExit = 1
                         }
-                    }
+                    
                 }
             }
             print("selected route index \(_routeIndex)")
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            
+            
             
             
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2825,7 +2899,7 @@ func catchNotificationRoute(notification:Notification) -> Void {
                                 }
                                 if (!added) {
                                     _routeSettings.msgs.append(testo)
-                                    status.forceQuit = true //showMessageResetApp()
+                                    status.forceExit = 2
                                 }
                                 prevAlias = fence.alias
                                 
@@ -2926,7 +3000,7 @@ func catchNotificationRoute(notification:Notification) -> Void {
                                 }
                             }
                             print("segnalo anomalia #0 fence \(p) not in the fencing configuration profile")
-                            status.forceQuit = true //showMessageResetApp()
+                            status.forceExit = 3
                         }
                     }
                 }
@@ -3127,7 +3201,7 @@ func catchNotificationRoute(notification:Notification) -> Void {
                                 }
                             }
                             print("segnalo anomalia #1 fence \(_to) not in the fencing configuration profile")
-                            status.forceQuit = true //showMessageResetApp()
+                            status.forceExit = 4
                         }
                     }
                     
@@ -3327,7 +3401,7 @@ func catchNotificationRoute(notification:Notification) -> Void {
                                     }
                                 }
                                 print("segnalo anomalia #2 fence \(_to) not in the fencing configuration profile")
-                                status.forceQuit = true //showMessageResetApp()
+                                status.forceExit = 5
                             }
                         }
                         //========================================================================================

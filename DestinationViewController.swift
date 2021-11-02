@@ -49,6 +49,21 @@ class DestinationViewController: UIViewController, SFSpeechRecognizerDelegate, A
     
     
     
+    func showMessageForceExit(_ msgHeader:String?, _ msgBody:String?){
+           let exitAppAlert = UIAlertController(title: NSLocalizedString(msgHeader!, comment: "forceexit"), message: NSLocalizedString(msgBody!, comment: "forceexit"), preferredStyle: .alert)
+            let resetApp = UIAlertAction(title: NSLocalizedString("frc-exit-003", comment: "forceexit"), style: .destructive) {
+                (alert) -> Void in
+                    // home button pressed programmatically - to thorw app to background
+                    UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
+                    // terminaing app in background
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                        exit(EXIT_SUCCESS)
+                    })
+            }
+            exitAppAlert.addAction(resetApp)
+            present(exitAppAlert, animated: true, completion: nil)
+    }
+    
     func showMessageResetApp(_ msgHeader:String?, _ msgBody:String?){
         if (msgHeader != nil && msgBody != nil) {
             let exitAppAlert = UIAlertController(title: NSLocalizedString(msgHeader!, comment: "forceexit"), message: NSLocalizedString(msgBody!, comment: "forceexit"), preferredStyle: .alert)
@@ -90,6 +105,20 @@ class DestinationViewController: UIViewController, SFSpeechRecognizerDelegate, A
             }
             
             exitAppAlert.addAction(resetApp)
+            exitAppAlert.addAction(laterAction)
+            present(exitAppAlert, animated: true, completion: nil)
+        }
+        
+    }
+    
+    func showWarningMessage(_ msgHeader:String?, _ msgBody:String?){
+        if (msgHeader != nil && msgBody != nil) {
+            let exitAppAlert = UIAlertController(title: NSLocalizedString(msgHeader!, comment: "warningexit"), message: NSLocalizedString(msgBody!, comment: "warningexit"), preferredStyle: .alert)
+            let laterAction = UIAlertAction(title: NSLocalizedString("war-exit-005",comment: "warningexit"), style: .cancel) {_ in
+                //(alert) -> Void in
+                //self.dismiss(animated: true, completion: nil)
+            }
+            
             exitAppAlert.addAction(laterAction)
             present(exitAppAlert, animated: true, completion: nil)
         }
@@ -183,7 +212,7 @@ class DestinationViewController: UIViewController, SFSpeechRecognizerDelegate, A
        
                         // no where equals to any where !!!!
                         print("no way to operate in this way (area unknown) \(status.selectedArea)")
-                        status.forceQuit = true
+                        status.forceExit = 6
                         
                     
                     
@@ -653,7 +682,7 @@ class DestinationViewController: UIViewController, SFSpeechRecognizerDelegate, A
     
     
     
-    @IBOutlet weak var daPickerView: UIPickerView!
+    @IBOutlet weak var daPickerView: SpinnPicker! //UIPickerView!
     
     @IBOutlet weak var aPickerView: UIPickerView!
     
@@ -860,6 +889,13 @@ class DestinationViewController: UIViewController, SFSpeechRecognizerDelegate, A
         
         // Do any additional setup after loading the view.
         
+        if (status.fireTimingMonitorForIssues == 0) {
+            status.fireTimingMonitorForIssues = 1
+            _ftSIRD = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(FireTimingMonitorForIssues), userInfo: nil, repeats: true)
+        }else{
+            EXIT_FAILURE
+        }
+        
         if (status.fireTimingSniffInsideRetrievedData == 0) {
             status.fireTimingSniffInsideRetrievedData = 1
             _ftSIRD = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(FireTimingSniffInsideRetrievedData), userInfo: nil, repeats: true)
@@ -1030,6 +1066,19 @@ class DestinationViewController: UIViewController, SFSpeechRecognizerDelegate, A
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         
+        
+        // petta ancora un pochino dai... verifico che esista un percorso possibile scandagliandoli tutti
+        var riAspettaUnPo:[String] = []
+        for c in status.possibiliDestinazioni {
+            let whatadam = routePreCheckingByStart2EndPoints(status.origine, c)
+            if (whatadam >= 0){
+                riAspettaUnPo.append(c)
+            }
+        }
+        status.possibiliDestinazioni = riAspettaUnPo
+        status.possibiliDestinazioni.sort(by: <)
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
         status.numPercorsiPossibili = status.possibiliDestinazioni.count
         
         aPickerView.reloadAllComponents()
@@ -1178,6 +1227,11 @@ class DestinationViewController: UIViewController, SFSpeechRecognizerDelegate, A
                         }
                                                
                         selection = status.possibiliModalita[row] as String
+                        
+                        if (status.modalita != selection){
+                            startButton.isEnabled = false
+                            showWarningMessage("war-exit-001","war-exit-002") // becouse it will force underground behaves
+                        }
                         
                         status.modalita = selection
                         
@@ -1396,6 +1450,14 @@ class DestinationViewController: UIViewController, SFSpeechRecognizerDelegate, A
             //status.shakedDevice += 1 // replaced by double tap on the main image
         }
         
+    }
+    
+    
+    @objc func FireTimingMonitorForIssues()
+    {
+        if (status.forceExit != 0){
+            showMessageForceExit("Unrecoverable Error # \(status.forceExit)","Please contact your technical support")
+        }
     }
     
     
