@@ -56,6 +56,11 @@
 "frc-exit-003" = "Close Now";
 "frc-exit-004" = "Later";
 "frc-exit-005" = "Continue";
+/* warningexit */
+"war-exit-001" = "Change in Modality foces restart";
+"war-exit-002" = "Please restart the App";
+"war-exit-005" = "OK";
+/* orientation */
 "ori-pc01-North" = "north";
 "ori-pc01-Sud" = "south";
 "ori-pc01-Est" = "est";
@@ -73,8 +78,11 @@
 "vce-ut04-a01" = "is the number of allowed repetitions";
 /* autoDetectionPosition */
 "vce-ut10-b01" = "auto determinated location";
+/* accessibility hint */
+"hint-configURL" = "enter here the url to the configurtion page";
+"hint-signinButton" = "to proceed with the experience be sure to have red and accepted sections: Intructions, Privacy and Disclaimer";
 /* aboutThisApp */
-"o2-ir1-aa3" = "This project is based on a MIT licensed general-purpose software written & Copyright[ed] 2020-2021 by Mauro Antonio Giacomello.\n";
+"o2-ir1-aa3" = "This project is based on a MIT licensed general-purpose software created & Copyright 2020-2021 by Mauro Antonio Giacomello.\n";
 /* usageInstructions */
 "o2-ir1-au3" = "\n";
 /* dataPrivacy */

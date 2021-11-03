@@ -80,6 +80,10 @@
 "frc-exit-003" = "Chiudi Adesso";
 "frc-exit-004" = "Chiudi Dopo";
 "frc-exit-005" = "Continua";
+/* warningexit */
+"war-exit-001" = "Cambiando la modalità necessita la ripartenza dell'App";
+"war-exit-002" = "Si prega di chiudere e riattivare l'App";
+"war-exit-005" = "OK";
 /* orientation */
 "ori-pc01-North" = "nord";
 "ori-pc01-South" = "sud";
@@ -98,8 +102,11 @@
 "vce-ut04-a01" = "è il massimo numero di ripetizioni possibili";
 /* autoDetectionPosition */
 "vce-ut10-b01" = "positione auto determinata";
+/* accessibility hint */
+"hint-configURL" = "inserisci l'URL alla pagina di configurazione";
+"hint-signinButton" = "Prima di procedere assicurati di aver letto, compreso e accettato le sezioni: Istruzioni, Privacy e Manleva";
 /* aboutThisApp */
-"o2-ir1-aa3" = "Questo progetto si basa su un software generico in licenza MIT scritto e Copyright[ed] 2020-2021 da Mauro Antonio Giacomello.\n";
+"o2-ir1-aa3" = "Questo progetto si basa su un software generico in licenza MIT creato e Copyright 2020-2021 da Mauro Antonio Giacomello.\n";
 /* usageInstructions */
 "o2-ir1-au3" = "istruzioni operative inerenti utilizzo di questa app.\n";
 /* dataPrivacy */

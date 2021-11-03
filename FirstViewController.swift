@@ -449,12 +449,6 @@ class FirstViewController: UIViewController, SFSpeechRecognizerDelegate, AVAudio
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         
-        /* ?????
-         --- Accessibility how to Override the default actions to erogate the right messages ---
-        guidaImageView.isAccessibilityElement = true
-        guidaImageView.accessibilityTraits = .image
-        guidaImageView.accessibilityLabel = "some text i want read aloud"
-         ????? */
          
     }
     
@@ -549,25 +543,7 @@ class FirstViewController: UIViewController, SFSpeechRecognizerDelegate, AVAudio
         
     }
     
-    /*
-    // set the condition to get control after the viewWillLoad
-    super.viewDidLoad()
-    NotificationCenter.default.addObserver(self, selector: "OnAppBecameActive", name: UIApplication.didBecomeActiveNotification, object: nil)
-    //refreshView()
-    func refreshView()
-    {
-        //all the code goes here
-        print("hey")
-    }
-    func OnAppBecameActive()
-    {
-        // Add logic here to check if need to call refresh view method
-        //if needToRefreshView
-        //{
-          refreshView()
-        //}
-    }
-    */
+    
     
     override public func viewWillAppear(_ animated: Bool) {
         // bla bla bla

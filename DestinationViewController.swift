@@ -43,6 +43,10 @@ var __signalsBEACONdata:[[Any]] = []
 var __minRaggio = CLLocationDegrees(Float(99999999))
 var __minFence  = ""
 var __last_shakered_times = 0
+class SpinnPicker: UIPickerView {
+}
+extension SpinnPicker {
+}
 class DestinationViewController: UIViewController, SFSpeechRecognizerDelegate, AVAudioPlayerDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITabBarDelegate, UIScrollViewDelegate {
    
     

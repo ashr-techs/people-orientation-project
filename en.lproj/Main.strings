@@ -41,10 +41,10 @@
 "7Pd-aV-xYU.text" = "Feature Controlling";
 /* Class = "UILabel"; accessibilityHint = "an app to foster accessibility and inclusion"; ObjectID = "97R-4s-fmI"; */
 "97R-4s-fmI.accessibilityHint" = "an app to foster accessibility and inclusion";
-/* Class = "UILabel"; accessibilityLabel = "Premise of Qwerty XYZ project  heading"; ObjectID = "97R-4s-fmI"; */
-"97R-4s-fmI.accessibilityLabel" = "Premise of Qwerty XYZ project  heading";
-/* Class = "UILabel"; text = "Qwerty XYZ project"; ObjectID = "97R-4s-fmI"; */
-"97R-4s-fmI.text" = "Qwerty XYZ project";
+/* Class = "UILabel"; accessibilityLabel = "University of Pavia SI@ project  heading"; ObjectID = "97R-4s-fmI"; */
+"97R-4s-fmI.accessibilityLabel" = "University of Pavia SI@ project  heading";
+/* Class = "UILabel"; text = "Pavia SI@ project"; ObjectID = "97R-4s-fmI"; */
+"97R-4s-fmI.text" = "Pavia SI@ project";
 /* Class = "UILabel"; text = "from:"; ObjectID = "9nz-UV-gcd"; */
 "9nz-UV-gcd.text" = "from:";
 /* Class = "UIPickerView"; accessibilityLabel = "riservatezza"; ObjectID = "AMI-BB-gwe"; */
@@ -161,8 +161,8 @@
 "dWY-t4-hFi.accessibilityLabel" = "quadrante con riprodotta mappa del luogo";
 /* Class = "UITextView"; text = "..."; ObjectID = "dwu-mP-NxH"; */
 "dwu-mP-NxH.text" = "..??..";
-/* Class = "UIImageView"; accessibilityLabel = "PREMISE,  Intestazione"; ObjectID = "fRf-AW-CYy"; */
-"fRf-AW-CYy.accessibilityLabel" = "PREMISE,  Intestazione";
+/* Class = "UIImageView"; accessibilityLabel = "UNIPVSP,  Intestazione"; ObjectID = "fRf-AW-CYy"; */
+"fRf-AW-CYy.accessibilityLabel" = "UNIPVSP,  Intestazione";
 /* Class = "UILabel"; text = "Phone #"; ObjectID = "hSY-Zd-NO3"; */
 "hSY-Zd-NO3.text" = "Phone #";
 /* Class = "UIImageView"; accessibilityLabel = "flag di già accettato"; ObjectID = "hTN-IK-GWH"; */
@@ -235,6 +235,16 @@
 "49M-cU-cnh.normalTitle" = "route";
 /* Class = "UILabel"; text = "Personal Settings"; ObjectID = "kdH-g5-4xM"; */
 "kdH-g5-4xM.text" = "Personal Settings";
+/* Class = "UILabel"; accessibilityLabel = "Personal Settings  heading"; ObjectID = "kdH-g5-4xM"; */
+"kdH-g5-4xM.accessibilityLabel" = "Personal Settings  heading";
 /* Class = "UITabBarItem"; title = "Settings"; ObjectID = "rIE-O7-S4Y"; */
 "rIE-O7-S4Y.title" = "Settings";
+/* Class = "UIStepper"; accessibilityLabel = "voice volume"; ObjectID = "nhb-uc-vA7"; */
+"nhb-uc-vA7.accessibilityLabel" = "voice volume";
+/* Class = "UIStepper"; accessibilityLabel = "voice velocity"; ObjectID = "Glw-iq-IsJ"; */
+"Glw-iq-IsJ.accessibilityLabel" = "voice velocity";
+/* Class = "UIStepper"; accessibilityLabel = "repetition paceing"; ObjectID = "fVT-tm-gMo"; */
+"fVT-tm-gMo.accessibilityLabel" = "repetition paceing";
+/* Class = "UIStepper"; accessibilityLabel = "repetitions number"; ObjectID = "yvI-4Q-EQf"; */
+"yvI-4Q-EQf.accessibilityLabel" = "repetitions number";
 

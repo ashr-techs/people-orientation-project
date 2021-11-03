@@ -79,9 +79,9 @@
 "acW-dT-cKf.title" = "Mappa";
 /* Class = "UILabel"; text = "Feedback:"; ObjectID = "b83-hh-mZN"; */
 "b83-hh-mZN.text" = "Feedback:";
-"97R-4s-fmI.text" = "Qwerty Progetto XYZ";
-/* Class = "UILabel"; accessibilityLabel = "Premise of Qwerty XYZ project  Intestazione"; ObjectID = "97R-4s-fmI"; */
-"97R-4s-fmI.accessibilityLabel" = "Universita di Qwerty Progetto XYZ  Intestazione";
+"97R-4s-fmI.text" = "PAVIA Progetto SI@";
+/* Class = "UILabel"; accessibilityLabel = "University of Pavia SI@ project  Intestazione"; ObjectID = "97R-4s-fmI"; */
+"97R-4s-fmI.accessibilityLabel" = "Universita di Pavia Progetto SI@  Intestazione";
 /* Class = "UITabBarItem"; title = "S-Settings"; ObjectID = "cPa-gy-q4n"; */
 "cPa-gy-q4n.title" = "S-Impostazioni";
 /* Class = "UITextView"; text = "..??.."; ObjectID = "dwu-mP-NxH"; */
