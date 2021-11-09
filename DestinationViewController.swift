@@ -625,48 +625,69 @@ class DestinationViewController: UIViewController, SFSpeechRecognizerDelegate, A
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            
-            // Attenzione !!! possibiliOrigini & destinazioniNonSelezionabili contribuiscono
-            // a definire la scena... forse viene a verificarsi che una possibile Origine
-            // venga bruciata in quanto eliminata come possibile Destinazione !! illogico !!
-            
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            
-            // force filter #1
-            
-            if (status.originiNonSelezionabili.count > 0) {
-                var pettaUnPo:[String] = []
-                for c in status.possibiliOrigini {
-                    if let index = status.originiNonSelezionabili.firstIndex(of: c) {
-                        // se non selezionabile non lometto in lista
-                    }else{
-                        pettaUnPo.append(c)
-                    }
-                }
-                status.possibiliOrigini = pettaUnPo
-                //status.possibiliOrigini.sort(by: <)
-            }
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // force filter #2
-            
-            if (availableStartingPoints.count > 0) {
-                var pettaUnPo:[String] = []
-                for c in status.possibiliOrigini {
-                    if let index = availableStartingPoints.firstIndex(of: c) {
-                        pettaUnPo.append(c)
-                    }
-                }
-                status.possibiliOrigini = pettaUnPo
-                //status.possibiliOrigini.sort(by: <)
-            }
-            
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
-                
+        // Attenzione !!! possibiliOrigini & destinazioniNonSelezionabili contribuiscono
+        // a definire la scena... forse viene a verificarsi che una possibile Origine
+        // venga bruciata in quanto eliminata come possibile Destinazione !! illogico !!
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        // force filter #1
+        
+        if (status.originiNonSelezionabili.count > 0) {
+            var pettaUnPo:[String] = []
+            for c in status.possibiliOrigini {
+                if let index = status.originiNonSelezionabili.firstIndex(of: c) {
+                    // se non selezionabile non lometto in lista
+                }else{
+                    pettaUnPo.append(c)
+                }
+            }
+            status.possibiliOrigini = pettaUnPo
+            //status.possibiliOrigini.sort(by: <)
+        }
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // force filter #2
+        
+        if (availableStartingPoints.count > 0) {
+            var pettaUnPo:[String] = []
+            for c in status.possibiliOrigini {
+                if let index = availableStartingPoints.firstIndex(of: c) {
+                    pettaUnPo.append(c)
+                }
+            }
+            status.possibiliOrigini = pettaUnPo
+            //status.possibiliOrigini.sort(by: <)
+        }
+        
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+            
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///
+        ///
+        // RESETTING BEACON + FENCE + ROUTE MNGT AREAS
+        
+        status.bnitg                            = []
+        status.bnitg_                           = 0
+        
+        status.butf                             = []
+        status.bnutf                            = []
+        
+        status.routePois                        = []
+        
+        status.fonr                             = []
+        status.bonr                             = []
+        status.bonr_shadow                      = []
+        
+        status.routeSegmentF2FUnderTheFocus     = []
+        status.beaconsUnderTheFocus             = []
+        
+        // END RESET
+        ///
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
@@ -1081,6 +1102,7 @@ class DestinationViewController: UIViewController, SFSpeechRecognizerDelegate, A
         }
         status.possibiliDestinazioni = riAspettaUnPo
         status.possibiliDestinazioni.sort(by: <)
+        
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         status.numPercorsiPossibili = status.possibiliDestinazioni.count

@@ -1018,6 +1018,8 @@ struct StatusController : Codable {
     
     
     
+    
+    
     static var retrievedData: [String]          = []
     
     static var signalsCounters:_Counters        = _Counters(generic: 0, beacons: 0, shakes: 0, others: 0, dusts: 0)
@@ -1073,8 +1075,7 @@ struct StatusController : Codable {
     static var beaconsUnderTheFocus:[String]    = []
     // beaconsUnderTheFocus si differenzia da butf perchè sottente i beacon del segment
     // nella logica Da->A indica il beacon Da ed il beacon A)
-    static var defaultedRouteSegments:[[String]] = []
-    // route segments without any customized configuration setting
+    
     
     static var autoLocation                     = false
     
@@ -1201,6 +1202,8 @@ class Status {
     var orentationMapInitialized                = StatusController.orentationMapInitialized
     var virtualCoordinateActivated              = StatusController.virtualCoordinateActivated
     
+    
+    
     var linguaCorrente                          = StatusController.linguaCorrente
     
     
@@ -1277,7 +1280,7 @@ class Status {
     
     var beaconsUnderTheFocus                    = StatusController.beaconsUnderTheFocus
     
-    var defaultedRouteSegments                  = StatusController.defaultedRouteSegments
+    
     
     var autoLocation                            = StatusController.autoLocation
     
@@ -2460,12 +2463,6 @@ func minComune (_ new:[String], _ base:[String]) -> [String] {
     }
     return mcm
 }
-func autoDirezionami(_ fLat:Double, _ fLng:Double, _ tbl:[String], _ tLat:Double, _ tLng:Double) -> String {
-    // calcolo angolo gradiente
-    let ang = 0
-    // rimando a memoneto migliore
-    return(tbl[ang])
-}
 func fence2beacon(_ rf:String ) -> String {
     
     var beaconUnderTheFence = ""
@@ -2819,7 +2816,7 @@ func catchNotificationRoute(notification:Notification) -> Void {
             
             var _poi = POI(number: "", id: "", name: "")
             var _poiFence = PoiFence(lat: 0.0, lng: 0.0, radius: 0.0, desc: "")
-            var _routeSettings = RouteSettings(what: "set", environmentID: "", enclave: "", routeFromToNames: "", msg000A: "", msg000B: "", msg999A: "", POIs: [_poiFence], routePOIs: [_poi], msgs: [""])
+            var _routeSettings = RouteSettings(what: "set", environmentID: "", enclave: "", routeFromToNames: "", msg000A: "0A mancante", msg000B: "0B mancante", msg999A: "9A mancante", POIs: [_poiFence], routePOIs: [_poi], msgs: [""])
             // TEST ONLY !!!
             //_routeSettings.what = "test"
             // !!!! ATTENTION !!! uncommenting the above instruction the external setting is not in place !!!
@@ -2827,10 +2824,12 @@ func catchNotificationRoute(notification:Notification) -> Void {
             _routeSettings.environmentID = status.selectedArea
             _routeSettings.routeFromToNames = "\(da) \(a)"
             _routeSettings.msg999A = "hai raggiunto la destinazione selezionata."
+            var _cecarell = false
             for (nipc,ipc) in status.indicazioniPercorsi.enumerated() {
                 if (ipc.id==status.selectedArea){
                     //print(ipc.indicazioni[_routeIndex])
                     for indicazionePercorso in ipc.indicazioni[_routeIndex] {
+                        print("en \(_routeSettings.enclave) pf \(indicazionePercorso.from) pt \(indicazionePercorso.to)")
                         if (indicazionePercorso.from == "WILD" && indicazionePercorso.to == "WILD"){
                             _routeSettings.msg000A = indicazionePercorso.msg[0].text
                         }else{
@@ -2840,11 +2839,16 @@ func catchNotificationRoute(notification:Notification) -> Void {
                             }else{
                                 if (indicazionePercorso.from == _routeSettings.enclave && indicazionePercorso.to != "WILD"){
                                     //none to do here
+                                    _cecarell = true
+                                    break
                                 }else{
                                     //none to do here
                                 }
                             }
                         }
+                    }
+                    if (_cecarell){
+                        break
                     }
                 }
             }
@@ -2877,16 +2881,21 @@ func catchNotificationRoute(notification:Notification) -> Void {
                                 var testo = "testo #\(progressivo) mancante"
                                 for (nipc,ipc) in status.indicazioniPercorsi.enumerated() {
                                     if (ipc.id==status.selectedArea) {
-                                        //print(ipc.indicazioni[_routeIndex])
+                                        print("trce 1 route index \(ipc.indicazioni[_routeIndex])")
                                         for indicazionePercorso in ipc.indicazioni[_routeIndex] {
+                                            print("trce 2 indicazionePercorso \(indicazionePercorso)")
+                                            print("trce 3 _npt \(_npt) indicazionePercorso.from \(indicazionePercorso.from) _routeSettings.enclave \(_routeSettings.enclave) indicazionePercorso.to \(indicazionePercorso.to) fence.alias \(fence.alias)")
                                             if (_npt==0 && indicazionePercorso.from == _routeSettings.enclave && indicazionePercorso.to == fence.alias){
+                                                print("trce 3+ _npt \(_npt) indicazionePercorso.from \(indicazionePercorso.from) _routeSettings.enclave \(_routeSettings.enclave) indicazionePercorso.to \(indicazionePercorso.to) fence.alias \(fence.alias)")
                                                 testo = indicazionePercorso.msg[0].text
                                                 _routeSettings.msgs.append(testo)
                                                 _npt += 1
                                                 added = true
                                                 break
                                             }else{
+                                                print("trce 4 _npt \(_npt) prevAlias \(prevAlias) _routeSettings.enclave \(_routeSettings.enclave) indicazionePercorso.to \(indicazionePercorso.to) fence.alias \(fence.alias)")
                                                 if (prevAlias == indicazionePercorso.from && indicazionePercorso.to == fence.alias) {
+                                                    print("trce 4+ _npt \(_npt) prevAlias \(prevAlias) _routeSettings.enclave \(_routeSettings.enclave) indicazionePercorso.to \(indicazionePercorso.to) fence.alias \(fence.alias)")
                                                     testo = indicazionePercorso.msg[0].text
                                                     _routeSettings.msgs.append(testo)
                                                     _npt += 1
