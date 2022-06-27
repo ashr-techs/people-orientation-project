@@ -1,13 +1,16 @@
 
 //
-//  DestinationViewController.swift
+//  ReorderAccessibilityByStoryBoardView.swift
 //  Orientamento
 //
-//  Created by Mauro Antonio Giacomello on 05/03/2020.
+//  Created by Mauro Antonio Giacomello on 19/03/2020.
 //  The name of MAURO ANTONIO GIACOMELLO may not be used to endorse or promote
 //  products derived from this software without specific prior written permission.
 /*******************************************************************************
-* Copyright (c) 2020, 2021  Mauro Antonio Giacomello
+*
+* The MIT License (MIT)
+*
+* Copyright (c) 2020, 2021, 2022  Mauro Antonio Giacomello
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -29,12 +32,20 @@
 *******************************************************************************/
 //
 import UIKit
-class DestinationViewController: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
+extension UIView {
+    func updateOrder(_ direction: Bool = true) {
+        var tempElements: [Any]? = [Any]()
+        let views = (direction) ? subviews : subviews.reversed()
+        for aView in views {
+            tempElements?.append(aView)
+        }
+        accessibilityElements = tempElements
     }
-    override func viewWillAppear(_ sender: Bool) {
-         self.view.layoutIfNeeded()
-     }
+}
+class ReorderAccessibilityByStoryBoardView: UIView {
+    override func didAddSubview(_ subview: UIView) {
+        updateOrder()
+        super.didAddSubview(subview)
+    }
 }
 

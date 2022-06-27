@@ -7,7 +7,10 @@
 //  The name of MAURO ANTONIO GIACOMELLO may not be used to endorse or promote
 //  products derived from this software without specific prior written permission.
 /*******************************************************************************
-* Copyright (c) 2020, 2021  Mauro Antonio Giacomello
+*
+* The MIT License (MIT)
+*
+* Copyright (c) 2020, 2021, 2022  Mauro Antonio Giacomello
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal

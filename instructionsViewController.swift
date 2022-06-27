@@ -7,7 +7,10 @@
 //  The name of MAURO ANTONIO GIACOMELLO may not be used to endorse or promote
 //  products derived from this software without specific prior written permission.
 /*******************************************************************************
-* Copyright (c) 2020, 2021  Mauro Antonio Giacomello
+*
+* The MIT License (MIT)
+*
+* Copyright (c) 2020, 2021, 2022  Mauro Antonio Giacomello
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -66,6 +69,8 @@ class instructionsViewController: UIViewController, UIScrollViewDelegate, UIText
         instructionTextScrolling.delegate = self
         instructionTextScrolling.isEditable = false
         instructionTextScrolling.isScrollEnabled = true
+        
+        instructionTextScrolling.textAlignment = NSTextAlignment.left
         
         for cerco in GuidaDataModel.formality {
             if (status.linguaCorrente.lowercased().starts(with: cerco.language.lowercased())) {
