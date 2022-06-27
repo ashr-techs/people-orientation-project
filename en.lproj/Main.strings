@@ -144,7 +144,7 @@
 /* Class = "UILabel"; accessibilityLabel = "Disclamer  heading"; ObjectID = "Zoy-bX-f3a"; */
 "Zoy-bX-f3a.accessibilityLabel" = "Disclamer  heading";
 /* Class = "UILabel"; text = "Disclaimer"; ObjectID = "Zoy-bX-f3a"; */
-"Zoy-bX-f3a.text" = "Disclaimer";
+"Zoy-bX-f3a.text" = "Disclaimers";
 /* Class = "UITabBarItem"; title = "Map"; ObjectID = "acW-dT-cKf"; */
 "acW-dT-cKf.title" = "Map";
 /* Class = "UILabel"; text = "Feedback"; ObjectID = "b83-hh-mZN"; */

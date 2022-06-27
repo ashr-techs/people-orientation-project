@@ -32,7 +32,7 @@
 /* Class = "UILabel"; text = "Privacy statement"; ObjectID = "1UW-u1-ghV"; */
 "1UW-u1-ghV.text" = "Privacy";
 /* Class = "UILabel"; text = "Destinations"; ObjectID = "4Ra-RK-PrN"; */
-"4Ra-RK-PrN.text" = "Percorsi";
+"ijZ-yD-SBR.text" = "Percorsi";
 /* Class = "UILabel"; accessibilityLabel = "Destination heading"; ObjectID = "4Ra-RK-PrN"; */
 "4Ra-RK-PrN.accessibilityLabel" = "Percorsi  Intestazione";
 /* Class = "UILabel"; accessibilityHint = "destination selection"; ObjectID = "4Ra-RK-PrN"; */
@@ -42,11 +42,11 @@
 /* Class = "UILabel"; accessibilityHint = "un'app per l'accessibilità e l'inclusione"; ObjectID = "97R-4s-fmI"; */
 "97R-4s-fmI.accessibilityHint" = "un'app per l'accessibilità e l'inclusione";
 /* Class = "UILabel"; text = "da:"; ObjectID = "9nz-UV-gcd"; */
-"9nz-UV-gcd.text" = "da:";
+"Byz-5R-LMw.text" = "da:";
 /* Class = "UIButton"; normalTitle = "Proceed"; ObjectID = "Bse-ko-T7H"; */
 "Bse-ko-T7H.normalTitle" = "Procedi";
 /* Class = "UILabel"; text = "percorso:"; ObjectID = "C0o-Wp-aUb"; */
-"C0o-Wp-aUb.text" = "tappe:";
+"zoA-Mq-1Lj.text" = "tappe:";
 /* Class = "UIButton"; normalTitle = "Accept"; ObjectID = "C3x-xN-e8h"; */
 "C3x-xN-e8h.normalTitle" = "Accetto";
 /* Class = "UILabel"; text = "Locationing"; ObjectID = "Ckv-NU-42x"; */
@@ -54,7 +54,7 @@
 /* Class = "UITextView"; text = "..istruzioni.."; ObjectID = "DGs-CT-V3D"; */
 "DGs-CT-V3D.text" = "capitolo istruzioni";
 /* Class = "UILabel"; text = "modalità:"; ObjectID = "GBV-S6-Laq"; */
-"GBV-S6-Laq.text" = "modalità:";
+"BY7-JU-bAi.text" = "modalità:";
 /* Class = "UILabel"; text = "Disclaimer statement"; ObjectID = "Jqs-mH-20N"; */
 "Jqs-mH-20N.text" = "Manleva";
 /* Class = "UIButton"; normalTitle = "Stop/Reset"; ObjectID = "LXY-sZ-aTP"; */
@@ -97,13 +97,13 @@
 /* Class = "UIButton"; normalTitle = "Event Log"; ObjectID = "rZV-Av-0Q2"; */
 "rZV-Av-0Q2.normalTitle" = "Event Log";
 /* Class = "UITabBarItem"; title = "Destinations"; ObjectID = "sL5-Cj-OyX"; */
-"sL5-Cj-OyX.title" = "Percorsi";
+"cWJ-HQ-MpG.title" = "Percorsi";
 /* Class = "UILabel"; text = "a:"; ObjectID = "tH7-rt-bjs"; */
-"tH7-rt-bjs.text" = "a:";
+"s3n-Yp-R0u.text" = "a:";
 /* Class = "UITextView"; text = "..disclaimer.."; ObjectID = "uGz-Dc-uk0"; */
 "uGz-Dc-uk0.text" = "Capitolo Disclaimer";
 /* Class = "UILabel"; text = "criterio:"; ObjectID = "uki-ke-E7A"; */
-"uki-ke-E7A.text" = "criterio:";
+"n7F-Pp-bHX.text" = "criterio:";
 /* Class = "UILabel"; text = "Character:"; ObjectID = "xQ5-vW-PT6"; */
 "xQ5-vW-PT6.text" = "Utente:";
 /* Class = "UILabel"; text = "Sys-Settings"; ObjectID = "xgq-fV-Wl0"; */

@@ -113,4 +113,8 @@
 "o2-ir1-dp3" = "qui vengono riportate informazioni inerenti il trattamento dei dati attuato della applicazione \nOrientamento\n";
 /* responsibilityDisclaimer */
 "o2-ir1-rd3" = "possibili disclaimer rivolti agliutilizzatori della applicazione \nOrientamento\n.";
+/* dropdownmenu */
+"tap for origins list" = "lista origini";
+"tap for destinations list" = "lista destinazioni";
+"tap for route details" = "dettagli percorso ";
 
